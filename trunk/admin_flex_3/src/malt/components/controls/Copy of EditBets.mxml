@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow creationComplete="init()" xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+    title="Title Window"  >
+
+    <mx:Script>
+        <![CDATA[
+ 
+        	import mx.events.CloseEvent;
+        	import mx.collections.ArrayCollection;       
+            import mx.managers.PopUpManager;
+            import mx.controls.Text;
+            import mx.controls.Alert; 
+ 		    import mx.events.DragEvent;
+			import mx.managers.DragManager;
+ 		    import malt.components.service.BetsAction;
+ 			 			
+			[Bindable]
+ 			public var repData2:ArrayCollection; 	
+ 			
+ 		    [Bindable]
+ 			public var sportData:ArrayCollection;
+ 			
+ 		    [Bindable]
+ 			public var betTypesData:ArrayCollection; 
+ 			
+ 			 [Bindable]
+ 			public var nameBet:String; 
+	 		
+	 		[Bindable]
+ 			public var  betTypesInstances:ArrayCollection; 
+ 			
+ 			
+ 			 [Bindable]
+ 			public var stringFormat:String;
+ 			
+ 				[Bindable]
+ 			public var stringFormatActive:String;
+ 			
+ 			 private var _bets ;
+ 		 
+	 		
+	 		/*[Bindable]
+			public var groupsHeader:String; 
+	
+ 					
+ 					
+ 			[Bindable]
+ 			public var teamsList:ArrayCollection; 
+ 			
+ 		 
+ 			
+ 		    [Bindable]
+ 			public var betType:uint; 
+ 			
+ 			 
+ 			
+ 				[Bindable]
+ 			public var betTypesData:ArrayCollection; 
+ 			
+ 			
+ 			
+ 			[Bindable]
+ 			public var groupData:ArrayCollection; 
+ 			 
+ 			
+ 			 
+ 			 
+ 			 
+ 			  
+ 			
+ 			
+ 			 [Bindable]
+ 			public var cofirmGroup:String;
+ 			
+ 			 [Bindable]
+ 			public var resetGroup:String;
+ 			
+ 		
+ 			 
+ 		    private var _serviceTeam:TeamsAction;
+  
+ 			
+ 			
+ 		
+ 			
+ 			private var _betId:String; 			
+ 			private var  _modelBase;
+ 			private var serviceEvents:EventsAction;*/
+ 			
+ 			private var serviceBets:BetsAction
+ 		    private var betType:uint; 
+ 		    
+ 			[Bindable]
+ 			public var betTypeSelectedIndex:uint;
+ 			
+ 		   [Bindable]
+ 			public var teams:ArrayCollection; 
+ 			
+ 			[Bindable]
+ 			public var bet:ArrayCollection; 
+ 					
+     		
+     		public function  dataAC(sport:ArrayCollection,betParam:Array,teams,events)
+     		{ 
+     			   verticalBox.dataProvider=sport; 
+     			   sportData=sport; 
+     			   teams=teams  ; 
+     			    bet=new ArrayCollection(betParam); 
+     			    betTypesData= events ; 
+     			    betTypesInstances=new ArrayCollection(bet.toArray())
+     			    sportLabel.text=bet.getItemAt(0)['sport'];
+     			    groupLabel.text=bet.getItemAt(0)['groupname'];
+     			    betType=bet.getItemAt(0)['eventId'];
+     			 	stringFormat =bet.getItemAt(0)['dateinfo'];
+     			 	stringFormatActive =bet.getItemAt(0)['active'];
+	
+     			    
+     			    nameBet=bet.getItemAt(0)['name'];
+     			    setBetTypeIndex(betTypesData)
+ 		   }
+     		
+     		private function setBetTypeIndex(data:ArrayCollection):void
+     		{
+     			var len:uint=data.length;
+     			for(var i:uint=0;i<len;i++)
+     			{
+     			    if(data.getItemAt(i)['eventId']== betType)
+     				{  
+     				    betTypeSelectedIndex=i	 
+     					break
+     				}
+     				
+     			}
+     		
+     		}
+     		
+     	 
+     		 
+     		 
+   
+     	    private function returnName():void 
+     	    { 
+                PopUpManager.removePopUp(this);
+            }
+     		
+            private function changeNameBetType(text,data):void
+		    {
+			    repData2.getItemAt(data)['name']=text;
+		    }
+		
+		    private function changeOddsBetType(text,data):void
+		    {
+				 repData2.getItemAt(data)['odds']=text;
+		    }
+		
+		    private function callDeleteType(data:uint):void
+		    {
+			      repData2.removeItemAt(data);
+		    }
+     		
+     		public function nameResultData(event):void
+     		{ 
+     			betName.text=event
+     		}
+     		
+     	    
+     		private function init():void
+     		{
+     		 	   serviceBets=new BetsAction()
+     	  	}
+
+     		  public function groupResultData(event):void
+     		{  
+     			 //setGroupIndex(event)
+     		}
+
+     		 
+     		
+     		private function confirmHandler(column:String,data:String ):void
+     		{
+     	 	     
+     		   if(column=="name")
+     		   {
+     		   		serviceBets.callUpdateBet(nameResultData)
+     		   }
+     		    else if(column=="group")
+     		   {
+     		 	  	serviceBets.callUpdateBet(groupResultData)
+     		   }
+
+     		   else if(column=="event")
+     		   {
+     		   		serviceBets.callUpdateBet(betTypeResultData)
+     		   }
+     		   else if(column=="date")
+     		   {
+     			   //	serviceBets.callUpdateBet(dateResultData)
+     		   }
+     		    
+     		}
+     		
+     		 public function betTypeResultData(event):void
+     		{ 
+     			betType=event;
+     		//	setBetTypeIndex(betTypesData) ;
+     		}
+
+     		
+     		private function betResponse(event):void
+     		{var array=event as Array 
+     		//	betTypesInstances=new ArrayCollection(event as Array) 
+     		}
+     		
+     		public function changeTypeBet(event):void
+     		{
+     		//	model('EventsModel').eventID=event.currentTarget.selectedItem.eventId 
+     		 	var mess:String="This will delete current type setting. Click Ok to proceed or Cancel";
+     		 	Alert.show(mess,"",Alert.OK|Alert.CANCEL,this,bettypeCBHandler); 
+     			
+     		}
+     		 
+ 	  	
+	 	  	 public function bettypeCBHandler(event:CloseEvent):void
+			 {
+			 	  if (event.detail==Alert.OK) 
+			 	  {
+				// 	  serviceEvents.callSelectTypes(betTypeChangeResponse);
+	              }
+	              else
+	              {
+	             // 	betTypeCB.selectedIndex=betTypeSelectedIndexCB;
+	              } 
+	         }
+     		
+     		
+     		public function betTypeChangeResponse(event):void
+     		{
+     			var array:Array=event as Array;
+     			var len:uint=array.length;
+     			var tempAC:ArrayCollection=new ArrayCollection();
+     			for(var ie:uint=0;ie<len;ie++)
+		   		{ 
+		   	   		tempAC.addItem({"oddname":array[ie][1]})
+		   		 }
+     			
+     			
+     		//	betTypesInstances=new ArrayCollection(tempAC.toArray())
+     		}
+     		
+     		public function selectedIndexCB(event):void
+     		{
+     		//	betTypeSelectedIndexCB=event.currentTarget.selectedIndex;
+     		}
+     		
+     		public function addNewData():void
+     		{
+     		//	betTypesInstances.addItem({"oddname":eventType.text,"odd":eventTypeOdd.text,"saved":"new"});
+     		}
+     		
+     		public function formatBetTypeButton(data):String
+     		{
+     			if(data=="new")
+     			{
+     				return "Confirm";
+     			}
+     			else
+     			{
+     				return "Update";
+     			}
+     			
+     		}
+     		
+     		public function callDeleteTypeData(id):void
+     		{
+     		//	model('BetsModel').betsIdType=betTypesInstances.getItemAt(id)['betTypeId']
+     			serviceBets.callDelete(betResponse)
+     		}
+     		
+     		public function addNewBetTypeToBase(data,id,oddname,odd):void
+     		{ 
+     			if(data=="Update")
+     			{
+     		//		var array:Array=new Array([oddname,odd,betTypesInstances.getItemAt(id)['betTypeId']])
+     		//		model('SportsBetsModel').updateBetType=array;
+     				serviceBets.callUpdateBetType(betResponse)
+     			}
+     			else
+     			{
+     			//	var array:Array=new Array([oddname,odd, model('SportsBetsModel').groupIdEdited])
+     		//		model('SportsBetsModel').insertBetType=array;
+     				serviceBets.callInsertBetType(betResponse)
+     			}
+     	    }
+     	 
+         public  function dragEnterHandlerBox(event:DragEvent):void 
+         {
+        	    DragManager.acceptDragDrop(VBox(event.currentTarget));
+         }
+                
+          public  function dragDropHandler(event:DragEvent):void 
+          { 
+            	//event.currentTarget.text=model('TeamsModel').selectedDrag
+          }
+     	    
+     	  public function dragDropHandlerHBox(event:DragEvent):void
+          { 
+            	// betTypesInstances.addItem({"oddname":model('TeamsModel').selectedDrag ,"odd":eventTypeOdd.text,"saved":"new"});
+          }
+          
+         private function get call()
+     		{
+     			return _bets
+     		}
+
+          public function jok():void
+          {
+          	  teamsComp.call.component.AddTeams.visible=false ;
+		      teamsComp.call.component.AddTeams.includeInLayout=false;
+		      teamsComp.call.component.addNewTI.visible=false ;
+		      teamsComp.call.component.addNewTI.includeInLayout=false;
+          }
+        ]]>
+    </mx:Script>
+
+
+   <mx:HBox  width="100%" height="100%">
+		 <mx:VBox>
+		  <mx:Button click="returnName()" label="Close" />
+		 <mx:Panel title="Change group:">
+		 	<code:VerticalMenuBar dataProvider="{sportData}" id="verticalBox" labelField="name" />
+		 </mx:Panel>
+		 	
+		 </mx:VBox>
+		   
+	 
+			
+		  <mx:HBox width="70%" height="100%">
+			   <mx:Canvas width="100%" height="100%">
+ 		 				<mx:VBox width="100%" height="100%">
+		 		   	
+		 		   		<mx:HBox width="100%">
+		 		     		<mx:Label  text="Sport:" />  
+		 		   			<mx:Label id="sportLabel"   />  
+		 		   		</mx:HBox>
+		 		   		
+		 		   		<mx:HBox width="100%">
+		 		   		    <mx:Label text="Group:"  /> <mx:Label id="groupLabel"  />
+		 		   	 
+		 		   		</mx:HBox>
+		 		   		
+		 		   		<mx:HBox width="100%">
+		 		   		    <mx:Label text="Type of bet:"  />  <mx:ComboBox open="selectedIndexCB(event)" id="betTypeCB" selectedIndex="{betTypeSelectedIndex}"  change="changeTypeBet(event)" labelField="name" dataProvider="{betTypesData}" />
+		 		   	    	<mx:Button label="Confirm" click="confirmHandler('event',betTypeCB.selectedItem.eventId )"  /> 
+		 		   		</mx:HBox>
+		 		   		
+		 		   		<mx:HBox width="100%">
+		 		   			<mx:Label text="Event name:"  /> <mx:TextInput text="{nameBet}" id="betName" width="100%" 
+		 		   								   dragEnter="call.dragEnterHandler(event);"
+									               dragExit="call.dragExitHandler(event);"
+									               dragDrop="call.dragDropHandlerBetName(event);"
+		 		   				
+		 		   				/><mx:Button label="Confirm" click="confirmHandler('name',betName.text )" />   
+		 		   		</mx:HBox> 
+		 		   		
+		 		   	  <mx:HBox width="100%">
+	    			  <mx:Label text="Add new type:" />	<mx:TextInput id="eventType" />
+	    			    <mx:Label text="Odd:" />	<mx:TextInput id="eventTypeOdd" />
+	    			  <mx:Button label="Add" click="addNewData()" />  
+	    		  </mx:HBox>
+	    		   
+	    		    <mx:HBox width="100%">
+	    			  <mx:Label text="Bet active:" /><malt:DateTimer id="dateActive"   formatedTime="{stringFormatActive}" />  
+	    			  <mx:Button label="Confirm" click="confirmHandler('date',dateTimer.formatedTime)"  />   
+	    		  </mx:HBox>
+	    		
+	    		 <mx:HBox width="100%">
+	    			  <mx:Label text="Bet ends:" /><malt:DateTimer id="dateTimer"   formatedTime="{stringFormat}" />  
+	    			  <mx:Button label="Confirm" click="confirmHandler('date',dateTimer.formatedTime)"  />   
+	    		  </mx:HBox>
+		 		 
+	    		 
+		 	 
+		 	 
+		 	
+		 
+		  <mx:VBox  width="100%" height="100%"   
+		 	  		dragEnter="dragEnterHandlerBox(event);"
+					dragDrop="dragDropHandlerHBox(event);" 
+		 	  	    backgroundColor="blue"  
+		 	  	      borderStyle="solid"  	 >
+		 
+				 	<mx:Repeater        id="myrep" dataProvider="{betTypesInstances}" >
+						
+						 	<mx:HBox >
+						 			<mx:TextInput  height="100%" id="nameBType" width="70%"  text="{myrep.currentItem.oddname}" />
+						 		    <mx:TextInput height="100%" id="oddBType" width="30%"   text="{myrep.currentItem.odd}" /> 
+						 		    <mx:Button id="updateOrInsert" label="{formatBetTypeButton(myrep.currentItem.saved)}" click="addNewBetTypeToBase(updateOrInsert[event.target.instanceIndices].label,event.target.instanceIndices,nameBType[event.target.instanceIndices].text,oddBType[event.target.instanceIndices].text)"   />
+						 		    <mx:Button label="Delete" click="callDeleteTypeData(event.target.instanceIndices)"   />
+						 	</mx:HBox>
+					
+				 	</mx:Repeater>
+				 	
+		 	  	 	
+		
+		      </mx:VBox>  	  	  
+		  
+					 	 	
+					  
+		 		   	  
+		 		   	</mx:VBox>
+ 		   	
+ 		   </mx:Canvas>
+ 	
+ 		
+			    </mx:HBox> 
+			    <mx:VBox width="30%"  height="100%">
+			   		 <malt:Teams creationComplete="jok()" ClassName="Teams" id="teamsComp" width="100%" height="100%" />
+			   	 </mx:VBox>
+   </mx:HBox>
+
+</mx:TitleWindow>  

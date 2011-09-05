@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.components.controls.*"  xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 	
+ 	 	
+<mx:StringValidator  
+        	id="namedataValid"
+        	source="{namedata}" property="text" 
+            minLength="2" maxLength="50"
+       
+			 
+        />
+        
+  	 	
+<mx:StringValidator  
+        	id="lastnameValid"
+        	source="{lastname}" property="text" 
+            minLength="2" maxLength="50"
+           
+		  
+        />       
+ 
+ <mx:StringValidator  
+        	id="usernameValid"
+        	source="{username}" property="text" 
+            minLength="5" maxLength="20"
+          
+		  
+        />     
+ 	     
+ 	       
+      
+ 	     
+  <mx:EmailValidator 
+        	id="emailValid"
+        	source="{email}" property="text"  
+           	  
+        />     	     
+ 	
+ 	  <mx:StringValidator  
+        	id="passValid"
+        	source="{pass}" property="text" 
+            minLength="6" maxLength="20"
+        
+			  
+        />      	 
+ 	  	  
+ 	   <mx:StringValidator  
+        	id="retPassValid"
+        	source="{retPass}" property="text" 
+            minLength="6" maxLength="20"
+     
+			 
+        />      	 
+ 	  	  
+ 	  	  
+ 	  	  
+ 	  	  
+ 	 	  <mx:NumberValidator  
+        	id="fundsValid"
+        	source="{funds}" property="text" 
+            allowNegative="false"
+            minValue="0"   domain="real"
+      
+        />      
+ 	
+ 	       
+        
+ 	
+ 	
+ 	  <mx:TabNavigator change="call.tabChange(event)" width="100%" height="100%" id="box"  >
+ 	  	<mx:Canvas width="100%" height="100%" label="Manage Players">
+ 	  	<mx:Panel  width="100%" height="100%">
+ 	  	      <mx:RadioButtonGroup id="playerGroup" itemClick="call.setPlayersType()" />
+ 	  	     <mx:HBox width="100%">
+ 	  	     	 <mx:RadioButton groupName="playerGroup"  value="0" label="Players" selected="true" />
+ 	  	     	 <mx:RadioButton groupName="playerGroup" value="1" label="Admins" />
+ 	  	     	  <malt:Paging  id="paging" pagingClick="call.pagging(event)" maxData="30" displayLimit="7"    />
+ 	  	      </mx:HBox>
+ 	  	         
+ 	  		 <mx:DataGrid width="100%" id="dgUsers" height="100%">
+ 	  		 	<mx:columns>
+ 	  		 		<mx:DataGridColumn headerText="Username" dataField="name" />
+ 	  		 	    <mx:DataGridColumn headerText="First name" dataField="firstname" />
+ 	  		 	    <mx:DataGridColumn headerText="Last name" dataField="lastname" />   
+ 	  		 	      <mx:DataGridColumn headerText="Bets"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Bets" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" click="{outerDocument.call.editBets(data.userId)}"  />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 	      
+ 	  		 	    <mx:DataGridColumn headerText="Bank"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Bank"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.editBank(data.userId)}"  />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 
+ 	  		 	      
+ 	  		 	      <mx:DataGridColumn headerText="Edit"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Edit"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.editPlayer(data.userId)}" />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 	      
+ 	  		 	      
+ 	  		 	      
+ 	  		 	      
+ 	  		 	    
+ 	  		 	      
+ 	  		 	       <mx:DataGridColumn headerText="Delete"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Delete"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.deletePlayer(data.userId)}"   />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 	      
+ 	  		 	</mx:columns>
+ 	  		 </mx:DataGrid>
+ 	  	</mx:Panel>
+ 	  	</mx:Canvas>
+ 	  	<mx:Canvas width="100%" height="100%" label="Search player/admin">
+ 	  		  <mx:VBox width="100%" height="100%"  verticalGap="0" horizontalGap="0" >
+ 	  		  	
+ 	  		   <mx:HBox width="100%"  > <malt:Paging  id="pagingSearch" pagingClick="call.paggingSearch(event)" maxData="30" displayLimit="7"    />
+ 	  		       
+ 	  		        <mx:Label text="Search player:" />
+ 	  	              <mx:TextInput id="searchCompData" />
+ 	  	           <mx:ComboBox id="playerCBcriteri">
+ 	  	          	<mx:String>by Username</mx:String>
+ 	  	             <mx:String>by First name</mx:String>
+ 	  	          	 <mx:String>by Last name</mx:String> 
+ 	  	     
+ 	  	          </mx:ComboBox>
+ 	  	          <mx:Button label="Search" click="call.doSearch()" />
+ 	  	          	       </mx:HBox>
+ 	  	           <mx:DataGrid width="100%" id="dgUsersSearch" height="100%">
+ 	  		 	<mx:columns>
+ 	  		 		<mx:DataGridColumn headerText="Username" dataField="name" />
+ 	  		 	    <mx:DataGridColumn headerText="First name" dataField="firstname" />
+ 	  		 	    <mx:DataGridColumn headerText="Last name" dataField="lastname" />   
+ 	  		 	      <mx:DataGridColumn headerText="Bets"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Bets"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.editBets(data.userId)}"  />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 	      
+ 	  		 	    <mx:DataGridColumn headerText="Bank"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Bank"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.editBank(data.userId)}"  />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 
+ 	  		 	      
+ 	  		 	      <mx:DataGridColumn headerText="Edit"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Edit"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.editPlayer(data.userId)}" />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 	      
+ 	  		 	      
+ 	  		 	      
+ 	  		 	      
+ 	  		  
+ 	  		 	       <mx:DataGridColumn headerText="Delete"  width="50">
+ 	  		 	      <mx:itemRenderer>
+ 	  		 	      	<mx:Component>
+ 	  		 	      		<mx:Button label="Delete"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"    />
+ 	  		 	      	</mx:Component>
+ 	  		 	      </mx:itemRenderer>
+ 	  		 	      </mx:DataGridColumn>
+ 	  		 	      
+ 	  		 	</mx:columns>
+ 	  		 </mx:DataGrid>
+ 	  	          
+ 	  	          
+ 	  		  </mx:VBox>
+ 	  	          
+ 	  
+ 	  	</mx:Canvas>
+ 	  	<mx:Canvas  width="100%" height="100%" label="Add new Player">
+ 	  		<mx:Form>
+ 	  			<mx:FormItem label="Name:">
+ 	  				<mx:TextInput id="namedata" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Last Name:">
+ 	  				<mx:TextInput id="lastname" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="User name:">
+ 	  				<mx:TextInput id="username" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Email:">
+ 	  				<mx:TextInput id="email" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Password:">
+ 	  				<mx:TextInput id="pass" displayAsPassword="true" />
+ 	  			</mx:FormItem>
+ 	  		    <mx:FormItem label="Retype Password:">
+ 	  				<mx:TextInput id="retPass" displayAsPassword="true" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Funds:">
+ 	  				<mx:TextInput        id="funds" text="0" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="User role:">
+ 	  				<mx:ComboBox id="adminOrUser">
+ 	  					<mx:String>User</mx:String>
+ 	  					<mx:String>Admin</mx:String>
+ 	  				</mx:ComboBox>
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem  direction="horizontal" >
+ 	  				<mx:Button label="Save"  id="saveButton" click="call.save()"  />
+ 	  				<mx:Button label="Reset"   click="call.reset()" />
+ 	  			</mx:FormItem>
+ 	  		</mx:Form>
+ 	  	</mx:Canvas>
+ 	  </mx:TabNavigator>
+ 
+</maltC:MaltContainer>

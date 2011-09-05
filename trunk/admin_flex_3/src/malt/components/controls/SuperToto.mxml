@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer xmlns:code="http://code.google.com/p/flexlib/"   creationComplete="super.run(this);"   xmlns:malt="malt.components.controls.*"  xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 	
+ 
+ 	<mx:HBox  height="100%" width="100%"  id="box">
+		<mx:TabNavigator change="call.changeMainTab(event)"  width="100%" height="100%">
+		
+		<mx:Canvas label="Manage" width="100%" height="100%">
+		<malt:EventsSupertoto width="100%" height="50%" ClassName="EventsSupertoto" />
+		  </mx:Canvas>
+		<mx:Canvas label="Create new coupon" width="100%" height="100%">
+		<mx:HBox height="100%" width="100%">
+			
+			<mx:VBox height="100%" width="100%" >
+		 	
+		 	<mx:Form>
+		 		
+		 		<mx:FormItem label="Name of coupon:" direction="horizontal" >
+		 			  <mx:TextInput id="nameOfCoupon" />
+		 		</mx:FormItem>
+			
+    	        
+				<mx:FormItem label="Super bet:">
+		 		   		 	    <mx:ComboBox  labelField="name" creationComplete="call.superbetsComplete()" change="call.typebetCBClose(event)" prompt="Please select:" id="eventCB" />
+		 		 </mx:FormItem>
+		
+		 		<mx:FormItem label="Date active:" direction="horizontal" >
+		 			 <mx:Label  /><malt:DateTimer  id="dateActive"   />
+		 		</mx:FormItem>
+		 		
+		 		<mx:FormItem label="Date end:" direction="horizontal" >
+		 			 <mx:Label /><malt:DateTimer id="dateEnd"    />
+		 		</mx:FormItem>
+		 		   
+		  
+		 		   		
+		 		<mx:FormItem label="Number of rows:" direction="horizontal" >
+		 			 <mx:TextInput    id="textRow" />
+		 			 <mx:Button label="Create" click="call.rowSet()" />
+		 		</mx:FormItem>
+		 		  
+		 		<mx:FormItem label="Reset rows:" direction="horizontal" >
+		 			 <mx:Button  click="call.rowSetReset()"  label="Reset"  />
+		 		</mx:FormItem>
+		 
+		 		<mx:FormItem  direction="horizontal" >
+		 			 <mx:Button label="Save" click="call.saveCoupon();" />
+		 		</mx:FormItem>
+		 		
+		 		
+		 	</mx:Form>
+		   
+		<mx:Label id="event"   />
+  
+   <mx:HBox width="100%">
+
+   </mx:HBox>
+	<mx:Repeater id="r"  width="100%"  >
+    <mx:HBox width="100%">
+         <mx:Label id="repbutton" text="{r.currentIndex+1}."/>
+			
+				<mx:Repeater id="rE" dataProvider="{call.dataEventHolderType}"   width="100%"  >
+    
+			         <mx:Label width="10" id="reTextInput" text="{rE.currentItem.name}"/> 
+			         <mx:TextInput change="call.changeText(event.target.instanceIndices)"  id="text" />  
+				
+			  </mx:Repeater>
+		 <mx:Button id="reEButton" label="Delete" click="call.removeDataButtons(event.target.instanceIndices)"  /> 
+		
+	 </mx:HBox>
+  </mx:Repeater>
+		 
+	
+	</mx:VBox> 
+	
+	 
+			<mx:Canvas  label="Teams" width="100%" height="100%">
+			<mx:HBox  height="100%" width="100%">
+				
+	 	<mx:Panel  width="50%"  height="100%" title="Teams in this group:" >
+ <mx:Form>
+ 		<mx:FormItem label="Sport:">
+					 <mx:ComboBox id="sportCBBet"  prompt="Please select:"  creationComplete="call.completeSportCBBet()"      labelField="name" change="call.closeSportCBet(event)" />
+				</mx:FormItem>
+				
+				<mx:FormItem label="Group:">
+				  <mx:ComboBox id="groupsCBBet"  change="call.selectGroupsData()"   prompt="Please select:"    labelField="name" />
+    	        </mx:FormItem>
+ </mx:Form>
+ 		   <malt:BetsDataGrid  id="teamsTableData"  dragStart="call.dragIt(event)" dragProxyImage="malt.components.controls.DragProxy" height="100%" dragEnabled="true"    wordWrap="true" editable="false" variableRowHeight="true" width="100%"  >
+				   <malt:columns> 
+				    	 <mx:DataGridColumn    headerText="Teams" dataField="name" editable="false" /> 
+			 
+				</malt:columns>
+		 </malt:BetsDataGrid>
+ 
+ 	</mx:Panel>
+ 	
+ 	 <mx:Panel  width="50%"  height="100%" title="Events in this group:" >
+ 		  <mx:Button label="Refresh events" click="call.callEvents()" />
+ 		   <mx:DataGrid   height="100%"  id="eventDG" wordWrap="true" editable="true" variableRowHeight="true" width="100%"  >
+				   <mx:columns> 
+				    	 <mx:DataGridColumn    headerText="Events" dataField="name" editable="false" />   
+				</mx:columns> 
+		 </mx:DataGrid>
+ 		</mx:Panel>
+ 		
+			</mx:HBox>
+		 	</mx:Canvas>
+	 
+ 
+ 
+	 
+ 	 
+		</mx:HBox>
+			
+		</mx:Canvas>
+			
+ 
+			
+		</mx:TabNavigator>
+</mx:HBox>
+
+
+</maltC:MaltContainer>

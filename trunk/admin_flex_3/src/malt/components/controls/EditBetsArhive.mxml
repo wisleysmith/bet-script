@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow creationComplete="init()" xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+  >
+
+  <!-- <mx:StringValidator  
+        	source="{betName}" property="text" 
+            minLength="2" maxLength="100"
+            trigger="{updateButton}" triggerEvent="click" 
+			valid="updateName()"  
+        />
+ -->
+ 
+ 
+    <mx:Script>
+        <![CDATA[
+           	import malt.components.classes.CheckData;
+        	import mx.events.CloseEvent;
+        	import mx.collections.ArrayCollection;       
+            import mx.managers.PopUpManager;
+            import mx.controls.Text;
+            import mx.controls.Alert; 
+ 
+ 		    import malt.components.service.BetsAction;
+ 		    import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import malt.components.service.TeamsAction; 
+			
+			 	 [Bindable]
+ 		 	 private var oddsDataOld:ArrayCollection;
+ 	 
+ 
+ 			 
+ 			 
+ 			 
+ 			  
+ 			
+ 			
+ 			 [Bindable]
+ 			public var cofirmGroup:String;
+ 			
+ 			 [Bindable]
+ 			public var resetGroup:String;
+ 			
+ 		
+ 			 
+ 		    private var _serviceTeam:TeamsAction;
+  
+ 			
+ 			
+ 		
+ 			
+ 			private var _betId:String; 			
+  
+ 	        private var _checkData:CheckData;
+ 			private var serviceBets:BetsAction;
+ 		 
+ 	  
+ 				[Bindable]
+ 			public var bet:ArrayCollection;
+ 	 
+
+ 			
+ 			private var betTypeId:uint;
+ 			
+ 			private var betId:uint;
+ 					
+     		
+     		public function  dataAC( betParam:Array,instance:Array   )
+     		{ 
+     	 
+	    _checkData=CheckData.getInstance(); 		
+     			   bet=new ArrayCollection(betParam); 
+     			    oddsDataOld=new ArrayCollection(instance)
+      
+     		     
+     		       if(bet.getItemAt(0)['typename']==null)
+     		       {
+     		        	oddtypes.text="Canceled" ;
+     		            team.text="Canceled" ;
+	    			    result.text="Canceled" ;
+     		       } 
+     		       else
+     		       {
+     		       		oddtypes.text=bet.getItemAt(0)['typename'] ;
+     		            team.text=bet.getItemAt(0)['team']
+	    			    result.text=bet.getItemAt(0)['result']
+     		       }
+     		         
+ 		   }
+     		
+     	 
+     	    
+     		private function init():void
+     		{
+     		   serviceBets=new BetsAction(); 
+	    _checkData=CheckData.getInstance(); 		
+     		}
+ 
+           private function returnName():void 
+     	    { 
+                parentApplication.TabMain.ArhiveBets.call.callBetEventService()   ;
+                PopUpManager.removePopUp(this);
+            }
+     	 
+     	 
+      
+      	 public function saveBetData():void
+	 	 {    
+	 	 	if(result.text.length==0)
+	 	 	{
+	 	 		Alert.show("Please insert result");
+	 	 	}
+	 	 	{
+	 	 		serviceBets.corectTypeId=betTypeId
+	 	 		serviceBets.eventBetId=bet.getItemAt(0)['eventbetId'];  
+	 	    	serviceBets.updateData=result.text;  
+	 	     	serviceBets.callUpdateBetSaved(selectSavedBet); 
+	 	 	}
+           
+	 	  }
+     	 
+     	 public function selectSavedBet(event:ResultEvent):void
+     	 {
+     	 	 event.currentTarget.removeEventListener("result",selectSavedBet);    
+     	 }
+     	 
+     	 public function reset():void
+     	 {
+     	 	    serviceBets.arhiveBetType=bet.getItemAt(0)['eventbetId'];
+     	 		serviceBets.callResetBet(resultReset)
+     	 }
+     	 
+     	 public function resultReset(event:ResultEvent):void
+     	 {
+     	     if(_checkData.validation(event.result)) 
+	    	{
+     	 		returnName()
+     	 	}
+     	 	else
+     	 	{
+     	 		Alert.show("Problems on server, please try later.")
+     	 	}
+     	    event.currentTarget.removeEventListener("result",resultReset);    
+     	  
+     	 }
+		
+        ]]>
+    </mx:Script>
+
+  <mx:VBox width="100%"  height="100%" horizontalAlign="center"  verticalGap="0" horizontalGap="0">
+	 <mx:Button click="returnName()" label="Close" />
+ 
+ 
+	
+ 
+		 
+		
+		   <mx:HBox  >
+		   	<mx:Form>
+		   			 <mx:FormHeading label="Bet data:" />
+		 		      <mx:FormItem direction="horizontal" label="Event:">
+		    		 		  <mx:Label    text="{bet.getItemAt(0)['betname']}" />    
+		    			 </mx:FormItem>  
+			 		    
+			 		  <mx:FormItem  direction="horizontal"  label="Bet name:">
+			 		   	  <mx:Label text="{bet.getItemAt(0)['eventname']}" id="betName" width="100%"   />  
+			 		 </mx:FormItem>
+			 		  
+			 		  	 <mx:FormItem  direction="horizontal"  label="Event active:">
+		    			   <mx:Label    text="{bet.getItemAt(0)['active']}" />   
+		    		   </mx:FormItem>
+		    		
+		    			 <mx:FormItem direction="horizontal" label="Event end:">
+		    		 		  <mx:Label    text="{bet.getItemAt(0)['dateinfo']}" />    
+		    			 </mx:FormItem>  
+		    			 
+		    		    <mx:FormItem direction="horizontal" label="Bet type:">
+		    		 		  <mx:Label    text="{bet.getItemAt(0)['eventtypename']}" />    
+		    			 </mx:FormItem>  
+	    		 </mx:Form>
+	    		 
+	    		  
+		 		    
+		 		    
+ 
+		 		     	<mx:Form>
+		 		    <mx:FormHeading label="Winner:" />
+		 		 <mx:FormItem direction="horizontal" label="Bet type instance name:">
+	    		 		  <mx:Label   id="oddtypes"   />    
+	    			 </mx:FormItem>  
+		 		    
+		 		  
+		 		  	 <mx:FormItem  direction="horizontal"  label="Team:">
+	    			   <mx:Label  id="team"      />   
+	    		   </mx:FormItem>
+	    		
+	    				    		
+	    			 <mx:FormItem direction="horizontal" label="Result:" >
+	    		 		  <mx:Label id="result" />
+	    			 </mx:FormItem>  
+	    		
+	    		  
+		 		 
+		 		  	</mx:Form>
+		 	
+		 		
+		   </mx:HBox>
+		   	  	<mx:Form >
+		 		  		<mx:FormHeading label="Reset - This will send bet back to finished state" />
+		 		  		<mx:FormItem  direction="vertical">
+		 		  			  	<mx:Button label="Reset" click="reset()" />
+		 		  			  	<mx:Label text="Notice:Users that have win money on this bet, will not be affected" />
+		 		  		</mx:FormItem> 
+		 		  	</mx:Form>
+		     <mx:Panel width="100%" height="100%" title="Odds"> 
+	 <mx:DataGrid dataProvider="{ oddsDataOld}" width="100%" height="100%">
+		 <mx:columns>
+		 	<mx:DataGridColumn headerText="Instance names" rendererIsEditor="true" dataField="namedata" />
+		     <mx:DataGridColumn headerText="Odds" dataField="oddvalue"/>
+		 	<mx:DataGridColumn headerText="Active from" dataField="created"/> 
+		 </mx:columns> 
+	 </mx:DataGrid>
+  </mx:Panel>
+		 		   		 
+   </mx:VBox>
+   
+ 	 
+ 
+		  
+
+</mx:TitleWindow>  

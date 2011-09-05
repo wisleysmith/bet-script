@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow  creationComplete="init()"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+      >
+
+    <mx:Script>
+        <![CDATA[
+         	 import mx.managers.PopUpManager;
+ 		 	 import mx.collections.ArrayCollection;
+ 		 	 import malt.components.service.BetsAction;
+ 		     import mx.rpc.events.ResultEvent;
+ 		     import malt.components.classes.CheckData;
+ 		 	 
+ 		 	 [Bindable]
+ 		 	 private var oddsData:ArrayCollection;
+ 		 	 
+ 		 	 [Bindable]
+ 		 	 private var oddsDataOld:ArrayCollection;
+ 		 	 
+ 		 	 private var _service:BetsAction;  
+ 		     private var _checkData:CheckData; 
+ 		 	 
+     		public function set dataAC(data:Array )
+     		{ 
+     			var array=data;
+     		    oddsData=new ArrayCollection( array[0]);
+     		    oddsDataOld=new ArrayCollection( array[1]);
+     			     
+     	    } 
+     	    
+     	    public function init():void
+     	    {
+	    _checkData=CheckData.getInstance(); 		
+     	        _service=new BetsAction(); 
+    
+     	    } 
+     		 
+     	    private function returnName():void 
+     	    { 
+     	    	parentApplication.TabMain.call.bets()  ;
+                PopUpManager.removePopUp(this);
+            }
+     		
+     	    
+     	   public function  updateOdds(data,updateText):void
+     	   {  
+     			  _service.oddName=updateText;
+     			  _service.betsId=data;
+    			  _service.callUpdateBetType(resultUpdateNameOdds)
+     	   }
+     	   
+     	   public function updateOddsValue(data,updateOdd):void
+     	   {
+     	   	
+     	   		_service.oddForUpdate=updateOdd;
+     			_service.betsId=data;
+     	   		_service.callInsertNewOddService(resultUpdateNameOdds);
+     	   }
+     	
+     	public function resultUpdateNameOdds(event:ResultEvent):void
+     	{ 
+     	   
+     		    if(_checkData.validation(event.result))
+			    {
+		            var array=event.result as Array;
+		            oddsData=new ArrayCollection(array[0]);
+     		  	    oddsDataOld=new ArrayCollection(array[1]);
+		            
+      			}
+      			else
+      			{
+      			   
+      			}   
+     	}
+          
+        ]]>
+    </mx:Script>
+<mx:VBox width="100%" height="100%"  verticalGap="0" horizontalGap="0">
+	 <mx:Button click="returnName()" label="Close" />
+    
+    <mx:Panel width="100%" height="100%"  title="Active odds">
+     <mx:DataGrid dataProvider="{oddsData}" width="100%" height="100%">
+		 <mx:columns>
+		 	     <mx:DataGridColumn headerText="Instance names "  >
+		     		<mx:itemRenderer>
+				 	<mx:Component>
+				 		<mx:HBox width="100%">
+				 			<mx:TextInput id="textValue" text="{data.namedata}" width="75%"  />
+				 			<mx:Button paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" label="Update" click="{outerDocument.updateOdds(data.betTypesId,textValue.text)}" />
+				 	    </mx:HBox>
+				   </mx:Component>
+				   </mx:itemRenderer>
+		     </mx:DataGridColumn>
+		 	
+		 	
+		     <mx:DataGridColumn headerText="Odds"  >
+		     		<mx:itemRenderer>
+				 	<mx:Component>
+				 		<mx:HBox width="100%">
+				 			<mx:TextInput id="textValue" text="{data.oddvalue}" width="75%" />
+				 			<mx:Button  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  label="Update" click="{outerDocument.updateOddsValue(data.betTypesId,textValue.text)}" />
+				 	    </mx:HBox>
+				   </mx:Component>
+				   </mx:itemRenderer>
+		     </mx:DataGridColumn>
+		 	<mx:DataGridColumn headerText="Active from" dataField="created" /> 
+		 </mx:columns> 
+	 </mx:DataGrid> 
+    </mx:Panel>
+   
+   <mx:Panel width="100%" height="100%" title="Previous odds"> 
+	 <mx:DataGrid dataProvider="{ oddsDataOld}" width="100%" height="100%">
+		 <mx:columns>
+		 	<mx:DataGridColumn headerText="Instance names" rendererIsEditor="true" dataField="namedata" />
+		     <mx:DataGridColumn headerText="Odds" dataField="oddvalue"/>
+		 	<mx:DataGridColumn headerText="Active from" dataField="created"/> 
+		 </mx:columns> 
+	 </mx:DataGrid>
+  </mx:Panel>
+</mx:VBox>
+</mx:TitleWindow>  

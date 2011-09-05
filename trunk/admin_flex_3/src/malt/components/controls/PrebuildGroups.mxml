@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<malt:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+  
+ <mx:Panel height="100%" width="100%" title="Prebuild teams:">
+	  <mx:VBox height="100%" width="100%"  verticalGap="0" horizontalGap="0">
+		 <mx:DataGrid height="100%"   id="prebuildGroups"  wordWrap="true" editable="false" variableRowHeight="true" width="100%"    >
+			 <mx:columns>
+			   <mx:DataGridColumn headerText="Groups" dataField="name" />
+			   <mx:DataGridColumn headerText="Add" width="70">
+			   <mx:itemRenderer >
+			   	<mx:Component>
+			   		<mx:Button label="Add" click="outerDocument.call.addNewTeams(data.id)" />
+			   	</mx:Component>
+			   </mx:itemRenderer>
+			   </mx:DataGridColumn>
+			   <mx:DataGridColumn headerText="Teams" width="70">
+			   <mx:itemRenderer >
+			   	<mx:Component>
+			   		<mx:Button label="Teams" click="outerDocument.call.selectTeams(data.id)" />
+			   	</mx:Component>
+			   </mx:itemRenderer>
+			   </mx:DataGridColumn>
+		     </mx:columns>
+		 </mx:DataGrid>
+		 
+		 <mx:DataGrid height="100%"    id="prebuildTeams"   wordWrap="true" editable="false" variableRowHeight="true" width="100%"    >
+			 <mx:columns>
+			   <mx:DataGridColumn headerText="Teams" dataField="name" />
+			    <mx:DataGridColumn headerText="Add" width="70">
+			   <mx:itemRenderer >
+			   	<mx:Component>
+			   		<mx:Button label="Add" click="outerDocument.call.addNewTeamOne(data.id)" />
+			   	</mx:Component>
+			   </mx:itemRenderer>
+			   </mx:DataGridColumn>
+		     </mx:columns>
+		 </mx:DataGrid>
+	 
+		 
+	  </mx:VBox> 
+ </mx:Panel>
+</malt:MaltContainer>

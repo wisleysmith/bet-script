@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow initialize="init()" xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+    >
+
+<mx:Script>
+	<![CDATA[
+		import mx.collections.ArrayCollection;
+		
+	        import mx.events.DragEvent;
+			import mx.managers.DragManager;
+			import malt.core.model.ModelBase;  
+		    import mx.managers.PopUpManager;
+		     
+		    import malt.components.service.SupertotoAction;
+			
+			[Bindable]
+			private var repData:ArrayCollection;
+			
+			
+			private var eventsRep:ArrayCollection;
+			private var setData:ArrayCollection;
+	
+		    private var  _modelBase;
+		    
+		    private var sportDataAC:ArrayCollection;
+		    private var selIndexSport:uint;
+		    private var  groupData:ArrayCollection;
+		    private var  selIndexGroup:uint; 
+		    private var _supertotoService:SupertotoAction ;
+		
+		public function init():void
+		{
+			eventsRep=new ArrayCollection();
+		    _modelBase=ModelBase.getInstance(); 
+ 			 _supertotoService=new SupertotoAction();
+ 			 
+		}
+		
+		public function set dataAC(data:Object)
+     	{ 
+     		nameOfCoupon.text=data.name ;
+     		dateActive.formatedTime=data.datevible; 
+     		dateEnd.formatedTime=data.dateend; 
+      
+     		model("SupertotoModel").supertotoId=data.supertotoId
+     		
+     		if(data.databets!=undefined)
+     		{
+     			repData= data.databets ;
+     			textRow.text=String(data.databets.length)
+     		}
+     		else
+     		{
+     
+		    //      _supertotoService.callSelectSupertotoTeams(supertotoTeamsResult)
+     		}
+     		
+        }
+        
+        public function supertotoTeamsResult(event)
+        {
+        	repData=new ArrayCollection(event as Array)
+        	textRow.text=String(repData.length)
+        }
+        
+        public function rowSet(event):void
+  	  	{
+  	  	  var len:uint=uint(event.currentTarget.text)
+  	  	  
+  	  	   setData =new ArrayCollection();
+  	  	  
+  	  	  for(var i:uint=0;i<len;i++)
+  	  	  {
+  	  	  	 setData.addItem({"rowsCount":String(i+1)});
+  	  	  } 
+  	     	 repData=setData; 
+  	  	}
+     	
+     	
+     	private function   model(data:String):Object
+		{
+ 		    return _modelBase.getModelObject(data) 
+ 		}
+     		
+       	
+  	  	 public  function dragEnterHandler(event:DragEvent):void 
+	    {
+			 var dropTarget:TextInput=event.currentTarget as TextInput;
+		     DragManager.acceptDragDrop(dropTarget);
+	    }
+						
+						            
+		 // Called if the user drags the drag proxy away from the drop target.
+		 public  function dragExitHandler(event:DragEvent):void
+		{
+			 var dropTarget:TextInput=event.currentTarget as TextInput;                
+			//  revertBoxBorder();                
+		}                    
+     	    
+     	    
+      	public function addDataGridColumn( ):void
+  	  	{
+  	  		   /*var check:CheckBox=new CheckBox();
+                var dgc:DataGridColumn = new DataGridColumn(component.textColumn.text);
+                dgc.itemRenderer= new ClassFactory(malt.components.controls.ItemRendererSupertoto);  
+                var cols:Array =  component.tList.columns;
+                cols.push(dgc);
+                component.tList.columns = cols;  */
+                
+               eventsRep.addItem({"name":  textColumn.text});
+        }
+
+      public function removeDataButtons(data):void
+  	  {
+  	  	eventsRep.removeItemAt(data)
+  	  }
+  	  	
+  	   public  function dragDropHandlerBetName(event:DragEvent):void 
+	   { 
+			if(event.currentTarget.text=="")
+			{
+				event.currentTarget.text=model('TeamsModel').selectedDrag
+			}
+			else
+			{
+				event.currentTarget.text=event.currentTarget.text +" - "+model('TeamsModel').selectedDrag 
+			}
+					            	   
+	   }
+		
+		public function removeData(data):void
+		{
+		 	model("SupertotoModel").supertotoTeamsId= repData.getItemAt(data)['supertotoTeamId'];
+		  // 	 _supertotoService.callDeleteSupertotoTeamService(resultSupertototeams)
+		}
+		
+		public function changeSportCB(event:Event):void
+     	{
+   			//  component.groupData=model('SportsBetsModel').sportsAndGroups.getItemAt( event.currentTarget.selectedIndex)['children'];
+     		//	 model("GroupsModel").groupsId=component.groupsCB.selectedItem.groupsId;
+     		//	_serviceTeam.callSelect(teamResult);
+     	}
+     	
+     	public function resultSupertototeams(event):void
+     	{
+     		repData=new ArrayCollection(event as Array);
+     	}
+		
+		public function loadGroupsData()
+		{
+			
+		}
+		
+	     public function loadGroupsDataEvent(event)
+		{
+			
+		}
+		
+		
+        private function returnName():void 
+        { 
+           PopUpManager.removePopUp(this);
+        }
+     	
+     	public function addName():void
+     	{
+     		model("SupertotoModel").columnToUpdate="name";
+     		model("SupertotoModel").newData=nameOfCoupon.text;
+     	 // 	  _supertotoService.callUpdateSupertotoService(loadGroupsDataEvent)
+     	}
+     	
+     	 
+ 
+     	public function changeDateEnd():void
+     	{
+     		model("SupertotoModel").columnToUpdate="dateend";
+     		model("SupertotoModel").newData=dateEnd.formatedTime;
+     	 // 	_supertotoService.callUpdateSupertotoService(loadGroupsDataEvent)
+     	}
+     	
+     	     
+     	public function changeDateActive():void
+     	{
+     		model("SupertotoModel").columnToUpdate="datevisible";
+     		model("SupertotoModel").newData=dateActive.formatedTime;
+     	 // 	  _supertotoService.callUpdateSupertotoService(loadGroupsDataEvent)
+     	}
+     	
+     		public function changeColumn():void
+     	{
+     		model("SupertotoModel").columnToUpdate="column";
+     		model("SupertotoModel").newData=dateEnd.formatedTime;
+     	 // 	  _supertotoService.callUpdateSupertotoService(loadGroupsDataEvent)
+     	}
+		
+	]]>
+</mx:Script>
+
+ 	<mx:HBox height="100%" width="100%"  verticalGap="0" horizontalGap="0">
+			  <mx:Button click="returnName()" label="Close" />
+			<mx:VBox height="100%" width="100%">
+		 
+			<mx:HBox>
+			     <mx:Label text="Name of coupon:" /><mx:TextInput id="nameOfCoupon" /><mx:Button click="addName()" label="Confirm" />
+		 	</mx:HBox>
+			   	 <mx:HBox>
+			   	 <mx:Label text="Add new row:" /><mx:TextInput  change="rowSet(event)" id="textRow" /> <mx:Button label="Confirm" />
+			     <mx:Label text="Add new column:" />	<mx:TextInput  id="textColumn" />  <mx:Button label="Confirm" click="addDataGridColumn()" /> 
+			  </mx:HBox>
+			  
+			 
+			  
+			 <mx:HBox>
+			     <mx:Label  text="Date active:" /><malt:DateTimer  id="dateActive"   /><mx:Button label="Confirm" click="changeDateActive()"/>
+		 	</mx:HBox>
+		 		<mx:HBox>
+			     <mx:Label text="Date end:" /><malt:DateTimer id="dateEnd"    /><mx:Button label="Confirm"  click="changeDateEnd()" />
+		 	</mx:HBox>
+			     
+			     
+	 
+ 
+		<mx:Label text="Events:" />
+  
+	   <mx:HBox width="100%">
+		<mx:Repeater id="rE" dataProvider="{eventsRep}"  >
+	    
+	         <mx:TextInput width="35" id="reTextInput" text="{rE.currentItem.name}"/> 
+	         <mx:Button id="reEButton" label="Delete" click="removeDataButtons(event.target.instanceIndices)"  /> 
+		
+	  </mx:Repeater>
+	   </mx:HBox>
+		<mx:Repeater id="r" dataProvider="{repData}"  >
+	    <mx:HBox>
+	         <mx:Label id="repbutton" text="{r.currentIndex+1}."/>
+			 <mx:TextInput id="betName" text="{r.currentItem.name}" width="100%"   
+				 dragEnter="dragEnterHandler(event);"
+				 dragExit="dragExitHandler(event);"
+				 dragDrop="dragDropHandlerBetName(event);"
+				 />
+			 <mx:Button label="Remove" click="removeData(event.target.instanceIndices)" />
+			 
+			
+		 </mx:HBox>
+	  </mx:Repeater>
+		 
+	
+	</mx:VBox>
+	<mx:VBox height="100%" width="100%">
+		<mx:HBox>
+			<mx:ComboBox dataProvider="{sportDataAC}" change="changeSportCB(event)" selectedIndex="{selIndexSport}" labelField="name"/>
+   			<mx:ComboBox dataProvider="{groupData}" change="loadGroupsData()" id="groupsCB" selectedIndex="{selIndexGroup}"  labelField="name"/>
+    	</mx:HBox>
+		<malt:Teams ClassName="Teams" height="100%" width="100%" /> 
+		
+ 
+	 </mx:VBox>	
+	 
+ 	 
+		</mx:HBox>
+			
+
+</mx:TitleWindow>  

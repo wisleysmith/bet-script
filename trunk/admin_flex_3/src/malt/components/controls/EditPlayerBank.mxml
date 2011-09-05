@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow   xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+     >
+
+    <mx:Script>
+        <![CDATA[
+        	import mx.collections.ArrayCollection;
+        	import mx.rpc.events.ResultEvent;
+            import malt.components.service.PlayersAction;
+            import mx.managers.PopUpManager;
+            import mx.controls.Alert;
+           
+            private var userId:uint;
+            private var _service:PlayersAction;
+        	 
+     		public function  dataAC(data ):void
+     		{ 
+     		   _service=new PlayersAction();
+     		    userId=data;
+     		    // sets the invoice date to today's date
+				var invoiceDate:Date = new Date();
+				var millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+				// adds 30 days to get the due date
+				var dueDate:Date = new Date(invoiceDate.getTime() - (1 * millisecondsPerDay));
+		        first.dateField.selectedDate= dueDate;
+		        
+		        var invoiceDate:Date = new Date();
+				var millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+				// adds 30 days to get the due date
+				var dueDate:Date = new Date(invoiceDate.getTime() + (1 * millisecondsPerDay));
+		        second.dateField.selectedDate= dueDate
+		        
+		        _service.userEditId=userId;
+		        loadFunds()
+		            
+	        }
+	        
+	        public function loadFunds()
+	        {
+	        	    _service.callFunds( addFunds)
+	        }
+	        
+	        public function addFunds(event:ResultEvent):void
+	        {
+	        	bal.text=String(event.result);
+	            event.currentTarget.removeEventListener("result",addFunds);
+	        }
+     		
+     		 public function cancel():void
+ 	  		 {
+     		 	PopUpManager.removePopUp(this);
+     		 	 parentApplication.TabMain.Players.call.callPlayers();
+     		 }
+			
+			public function load():void
+			{
+		 	       if(second.dateField.selectedDate <   first.dateField.selectedDate )
+		 	  		{
+		 	  			var text:String="'From' date cant be higher or equal to 'To' date."
+		 	  			Alert.show(text)
+		 	  			return  void;
+		 	  		}  
+		 	  		else  if(second.dateField.selectedDate >   first.dateField.selectedDate )
+		 	  		{
+		 	  			
+		 	  		}
+		 	  		else
+		 	  		{ 
+				 	  		 if(second.hours <   first.hours)
+				 	  		{
+				 	  			var text:String="'From' hours cant be higher then 'To' hours"
+				 	  			Alert.show(text)
+				 	  			return  void;
+				 	  		} 
+				 	  		else  if(second.hours ==  first.hours)
+				 	  		{
+				 	  			 if(second.min <=  first.min)
+				 	  			 {
+				 	  			 	var text:String="'From' minutes cant be higher or same as 'To' minutes"
+				 	  				Alert.show(text)
+				 	  				return  void;
+				 	  			 }
+				 	  		}
+				 	  			
+		 	  		}
+		 	
+		 	
+		 	
+		 		 _service.userEditId=userId ;
+		         _service.datefirst=first.formatedTime;
+		         _service.datesecond= second.formatedTime;
+		         _service.statusOfBet=String(test.selectedValue);
+		         _service.callTransactions(resultData) ;
+	 	         
+			}
+			
+			public function resultData(event:ResultEvent):void
+			{ 
+		  		mainDG.dataProvider=new ArrayCollection(event.result as Array);
+		  	    event.currentTarget.removeEventListener("result",resultData);
+		 	}
+		 	
+		  
+		  public function addMoney():void
+		  {           
+		               _service.userEditId =userId ;
+		  	            _service.moneyInput= addTB.text;
+                        _service.statusTransaction=0 ;
+                          _service.serviceTransaction(resultTransaction)
+		  }
+		  
+		  public function removeMoney():void
+		  {           
+		               _service.userEditId =userId ;
+		  	            _service.moneyInput =removeTB.text;
+                        _service.statusTransaction=1 ;
+                        _service.serviceTransaction(resultTransaction)
+                    
+		  }
+		  
+		  public function resultTransaction(event:ResultEvent):void
+		  {
+		  	trace(event.result)
+		  }
+		  
+        ]]>
+    </mx:Script>
+    
+     	  	  
+ 	 	  <mx:NumberValidator  
+        	id="fundsValid"
+        	source="{addTB}" property="text" 
+            allowNegative="false"
+            minValue="0.01"   domain="real"
+            trigger="{addMoneyB}" triggerEvent="click" 
+            valid="addMoney()"
+        />      
+ 	
+ 	
+ 		  <mx:NumberValidator  
+        	id="fundsValide"
+        	source="{removeTB}" property="text" 
+            allowNegative="false"
+            minValue="0.01"   domain="real"
+            trigger="{removeMoneyB}" triggerEvent="click" 
+            valid="removeMoney()"
+        />      
+
+     <mx:VBox width="100%"  height="100%" horizontalAlign="center"  verticalGap="0" horizontalGap="0">
+	   <mx:Button click="cancel()" label="Close" /> 
+	  
+	      <mx:HBox>
+	           <mx:Label text="Balance:"/>
+	          <mx:Label  id="bal" />
+	         </mx:HBox>
+	         <mx:Button label="Refresh"  click="loadFunds()"/> 
+	   <mx:RadioButtonGroup id="test" />
+   <mx:HBox width="100%"    horizontalAlign="left">
+	  <mx:Form>
+	  <mx:FormHeading label="Account data" />
+           <mx:FormItem direction="horizontal">
+           	    <mx:RadioButton selected="true" id="active" value="true" groupName="test" label="In" />
+	   			<mx:RadioButton groupName="test" id="arhive" value="false" label="Out" /> 
+           </mx:FormItem>
+            
+ 
+	
+	 
+	 	  <mx:FormItem label="From:">
+	  			 <malt:DateTimer   id="first" />
+	    	</mx:FormItem>
+	    	<mx:FormItem label="To:">
+	    		<malt:DateTimer   id="second" />
+	    	</mx:FormItem>
+ 
+ 	  <mx:FormItem>
+	        <mx:Button label="Load" click="load()" />
+		</mx:FormItem>
+	 
+	  </mx:Form>
+	   
+	 
+		 	<mx:Form>
+		 	 <mx:FormHeading  label="Add/remove money" />
+		 		<mx:FormItem label="Add money" direction="horizontal" >
+		 			<mx:TextInput id="addTB" text="0" />
+		 			<mx:Button label="Add money"  id="addMoneyB"  />
+		 		</mx:FormItem>
+		 		
+		 		 <mx:FormItem label="Remove money"  direction="horizontal"  >
+		 			<mx:TextInput id="removeTB"   text="0"  />
+		 			<mx:Button label="Remove money" id="removeMoneyB" />
+		 		</mx:FormItem>
+		 		
+		 	</mx:Form>
+	  </mx:HBox>
+	    <mx:DataGrid id="mainDG"  width="100%" height="100%" variableRowHeight="true" wordWrap="true" >
+	   	<mx:columns> 
+	   		<mx:DataGridColumn headerText="Money" dataField="funds" />
+	   		  <mx:DataGridColumn headerText="Added by"   >
+	   		   <mx:itemRenderer>
+	   		   	<mx:Component>
+	   		   	<mx:VBox>
+	   		   		
+	   		   		<mx:Script>
+	   		   			<![CDATA[
+	   		   				private function t(data:String):String
+	   		   				{
+	   		   					 
+	   		   					if(data==null)
+	   		   					{
+	   		   						return "Admin";
+	   		   					}
+	   		   					else
+	   		   					{
+	   		   						return "Bet";
+	   		   					}
+	   		   				}
+	   		   			]]>
+	   		   		</mx:Script>
+	   		   		
+	   		   		<mx:Label   text="{t(data.ticket)}" />
+	   		   	</mx:VBox>
+	   		   	</mx:Component>
+	   		   </mx:itemRenderer>
+	   		  </mx:DataGridColumn>
+	   		<mx:DataGridColumn headerText="Date" dataField="date" /> 
+	   		
+	   	</mx:columns>
+	   </mx:DataGrid>
+
+  </mx:VBox>
+ 	 
+</mx:TitleWindow>  

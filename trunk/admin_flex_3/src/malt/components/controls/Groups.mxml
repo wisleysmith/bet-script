@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<malt:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+   <mx:StringValidator  
+        	source="{addNewTI}" property="text" 
+            minLength="2" maxLength="100"
+            trigger="{AddGroups}" triggerEvent="click" 
+			valid="call.addNew()"
+        />
+ 
+ 
+	  <mx:VBox height="100%" width="100%"  verticalGap="0" horizontalGap="0">
+		
+		 <mx:HBox width="100%" height="100%">
+			<mx:Panel width="100%" height="100%" id="sportsHeader"    >
+			 	  <mx:HBox width="100%" id="addSportHBox">
+			    	    <mx:TextInput  maxChars="250" width="100%" id="addNewTI" />
+			    	    <mx:Button id="AddGroups" label="Add new group"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"     />
+		    	  </mx:HBox> 
+		    	  
+		    	   <mx:DataGrid height="100%" id="groupsTableDG"  itemClick="call.getEditedSportRowIndex(event)"  wordWrap="true" editable="true" variableRowHeight="true" width="100%"   >
+				    <mx:columns> 
+				    	 <mx:DataGridColumn headerText="Groups" rendererIsEditor="true" dataField="name" editable="false">
+				    		<mx:itemRenderer>
+				    			<mx:Component>
+				    				<mx:HBox>
+				    					 <mx:StringValidator  
+								        	source="{groupsUpdateTI}" property="text" 
+								            minLength="2" maxLength="100"
+								            trigger="{myGroupsUpdate}" triggerEvent="click" 
+											valid="outerDocument.call.updateGroup(groupsUpdateTI.text,data.idGroups)"
+								        />
+				    					
+				    					 <mx:TextInput id="groupsUpdateTI" text="{data.name}" width="100%" />
+				    		             <mx:Button id="myGroupsUpdate"   label="Update"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"   />
+										  
+									</mx:HBox>
+				    		 	</mx:Component>
+				    		</mx:itemRenderer>
+				    		
+				    	    
+				    	 </mx:DataGridColumn>
+				    		
+						  		  
+								 <mx:DataGridColumn width="60"   id="sportFalseDGC"   headerText="Delete" editable="false" >
+									 <mx:itemRenderer>
+										 <mx:Component>
+										 	<mx:VBox verticalAlign="top" horizontalAlign="center" width="100%" height="100%">
+										 		<mx:Button  click="outerDocument.call.deleteSport(data.idGroups)"  label="Delete" color="red"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"   />
+										 	 </mx:VBox>
+										 	</mx:Component>
+									 </mx:itemRenderer>
+						 		</mx:DataGridColumn>
+						 		
+						 	 <mx:DataGridColumn width="80" headerText="Teams" editable="false" >
+				    		 	<mx:itemRenderer>
+				    		 		<mx:Component>
+				    		 			<mx:Button label="Teams"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"    />
+				    		 		</mx:Component>
+				    		 	</mx:itemRenderer>
+				    		 </mx:DataGridColumn>
+						 		
+				   </mx:columns>
+			   </mx:DataGrid>
+		
+		    	  
+		    	  
+		    	  
+			</mx:Panel>
+		 
+		 </mx:HBox>
+	 
+	  </mx:VBox>
+ 
+</malt:MaltContainer>

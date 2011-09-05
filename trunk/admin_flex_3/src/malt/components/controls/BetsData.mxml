@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer  creationComplete="super.run(this);"     xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 	
+ 	<mx:DataGrid >
+ 		<mx:columns>
+ 			<mx:DataGridColumn />
+ 			<mx:DataGridColumn />
+ 			<mx:DataGridColumn />
+ 		</mx:columns>
+ 	</mx:DataGrid>
+ 	 
+ 
+</maltC:MaltContainer>

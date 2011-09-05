@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+     
+ 	  	 
+     
+     
+<mx:TitleWindow   xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+       >
+
+     
+    <mx:StringValidator  
+        	id="namedataValid"
+        	source="{namedata}" property="text" 
+            minLength="2" maxLength="50"
+ 
+    required="false" 
+        />
+        
+  	 	
+<mx:StringValidator  
+        	id="lastnameValid"
+        	source="{lastname}" property="text" 
+            minLength="2" maxLength="50"
+ 
+    required="false" 
+        />       
+ 
+ <mx:StringValidator  
+        	id="usernameValid"
+        	source="{username}" property="text" 
+            minLength="5" maxLength="20"
+    
+    required="false" 
+        />     
+ 	     
+ 	       
+      
+ 	     
+  <mx:EmailValidator 
+        	id="emailValid"
+        	source="{email}" property="text"  
+ 
+    required="false" 
+			  	
+        />     	     
+ 	
+ 	  <mx:StringValidator  
+        	id="passValid"
+        	source="{pass}" property="text" 
+            minLength="6" maxLength="20" 
+    required="false" 
+        />      	 
+ 	  	  
+ 	   <mx:StringValidator  
+        	id="retPassValid"
+        	source="{passRetype}" property="text" 
+            minLength="6" maxLength="20"
+           required="false"   
+ 
+        />      	 
+ 	  	  
+ 	  	  
+ 	  	  
+  
+     		
+
+
+    <mx:Script>
+        <![CDATA[
+        	import mx.rpc.events.ResultEvent;
+  		    import mx.managers.PopUpManager;
+  			import mx.collections.ArrayCollection;
+  		    import malt.components.service.PlayersAction;
+  		    import mx.controls.Alert;
+            import mx.events.ValidationResultEvent;
+  	        import malt.components.classes.CheckData;
+  	      
+  	        
+  		    private var _service:PlayersAction;
+	  private var   _checkData=CheckData.getInstance(); 		
+  			var dataUser:ArrayCollection
+  			
+     		public function  dataAC(data:Array ):void
+     		{ 
+     		     _service=new PlayersAction();
+     			 dataUser=new ArrayCollection(data) ;
+     			 reset();
+ 		    }
+     		
+     		
+     	  public function update( ):void 
+     		 {   	  
+     		   
+  	  		  var vResult:ValidationResultEvent;
+  	  				
+  	  		   vResult = namedataValid.validate();
+                if (vResult.type==ValidationResultEvent.INVALID) 
+                    return;
+        		
+                   vResult = usernameValid.validate();
+                if (vResult.type==ValidationResultEvent.INVALID) 
+                    return;
+ 
+                vResult = emailValid.validate();
+                if (vResult.type==ValidationResultEvent.INVALID) 
+                    return;
+  	  		
+  	  		 vResult = passValid.validate();
+             if (vResult.type==ValidationResultEvent.INVALID) 
+                    return;
+  	  		
+  	  		 vResult = retPassValid.validate();
+             if (vResult.type==ValidationResultEvent.INVALID) 
+                    return;
+  	  		
+
+  	  		if(passRetype.text!=pass.text)
+  	  		{
+  	  			Alert.show("Password and retype password dont match")
+  	  			return
+  	  		}
+  	  		 		
+  	  		 	 
+  	  		   _service.username= username.text;
+  	  		   _service.firstname=namedata.text;
+  	  		   _service.lastname=lastname.text;
+  	  		   _service.email=email.text;  
+  	  		   _service.userEditId=dataUser.getItemAt(0)['userId'];
+		  	   _service.password=pass.text; 
+		  	     _service.callUpdatePlayersService(resultData) 
+           }
+ 	  		 
+ 	  		 
+ 	  		 public function resultData(event:ResultEvent):void
+ 	  		 {  
+ 	  		 	trace(event.result)
+ 	  		      
+ 	  		     if( _checkData.validation(event.result))
+ 	  		     {
+ 	  		       var data:ArrayCollection=new ArrayCollection(event.result as Array);
+ 	  		       username.text=  data.getItemAt(0)['name'];
+ 	  		       namedata.text= data.getItemAt(0)['firstname'];
+ 	  		       lastname.text=data.getItemAt(0)['lastname'];
+ 	  		       email.text=data.getItemAt(0)['mail'];  
+ 	  		       
+	 	  		     username.text= data.getItemAt(0)['name'];
+	     		 	namedata.text=data.getItemAt(0)['firstname'];
+	     		 	lastname.text=data.getItemAt(0)['lastname'];
+	     		 	email.text=data.getItemAt(0)['mail'];
+ 	  		     }  
+ 	  		     else
+ 	  		     {
+ 	  		     	if(_checkData.status=="duplicateUser")
+ 	  		     	{
+ 	  		     		Alert.show("Username exist")
+ 	  		     		username.text=dataUser.getItemAt(0)['name'] ;
+ 	  		     	}
+ 	  		     	else if(_checkData.status=="duplicateEmail")
+ 	  		     	{
+ 	  		     		Alert.show("Email exist")
+ 	  		     		 email.text=dataUser.getItemAt(0)['mail'] ;
+ 	  		     	}
+ 	  		     	else
+ 	  		     	{
+ 	  		     		Alert.show("Please check you data")
+ 	  		     		reset();
+ 	  		     	}
+ 	  	
+ 	  		     }
+ 	  		 		     	trace(_checkData.status)
+ 	  		 	 
+ 	  		 
+ 	  		  }
+ 	  		  
+ 	  	  
+ 	  		 public function reset():void  
+ 	  		 {
+     		 	username.text=dataUser.getItemAt(0)['name'] ;
+     		 	namedata.text=dataUser.getItemAt(0)['firstname'];
+     		 	lastname.text=dataUser.getItemAt(0)['lastname']  ;
+     		 	email.text=dataUser.getItemAt(0)['mail'] ;
+     		 }
+     		 
+ 	  		 public function cancel():void
+ 	  		 {
+     		 	PopUpManager.removePopUp(this);
+     		    parentApplication.TabMain.Players.call.callPlayers();
+     		 }
+		
+        ]]>
+    </mx:Script>
+
+  <mx:VBox width="100%"  height="100%" horizontalAlign="center"  verticalGap="0" horizontalGap="0">
+ 	<mx:Form>
+ 	  			<mx:FormItem label="First name:" direction="horizontal">
+ 	  				<mx:TextInput id="namedata" />
+ 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Last name:" direction="horizontal">
+ 	  				<mx:TextInput id="lastname" />
+ 	  		 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Username:" direction="horizontal">
+ 	  				<mx:TextInput id="username" />
+ 	  			 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Email:" direction="horizontal">
+ 	  				<mx:TextInput id="email" />
+ 	  	 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Password:" >
+ 	  				<mx:TextInput id="pass"  displayAsPassword="true" />
+ 	  			</mx:FormItem>
+ 	  		    <mx:FormItem label="Retype Password:" direction="horizontal">
+ 	  				<mx:TextInput id="passRetype" displayAsPassword="true"  />
+ 	  			 
+ 	  			</mx:FormItem>
+ 	  	    	<mx:FormItem  direction="horizontal" > 
+ 	  				<mx:Button label="Update"  id="updateButton" click="update( )" />
+ 	  				<mx:Button label="Reset" click="reset()"  />
+ 	  				<mx:Button label="Close" click="cancel()"  />
+ 	  			</mx:FormItem>
+ 	  	 </mx:Form>
+  </mx:VBox>
+
+</mx:TitleWindow>  

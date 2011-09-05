@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.components.controls.*"  xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 	
+    
+ 	
+ 	<mx:HBox width="100%" height="100%"  verticalGap="0" horizontalGap="0" >
+ 	
+		 	<mx:Accordion id="accordMain"  change="call.changeMainAccordian()"   width="100%" height="100%">
+		 		
+		 		<mx:Canvas label="Sports" width="100%" height="100%">
+		 			<mx:HBox width="100%" height="100%">
+			 		    <malt:Sports  id="sports"    width="50%" ClassName="Sports"  height="100%" />
+			 			<malt:Groups ClassName="Groups" id="groups"   width="50%" height="100%" />
+			 	   </mx:HBox>
+				</mx:Canvas>
+		 		 
+		 		<mx:Canvas label="Teams" width="100%" height="100%">
+		 			<mx:HBox width="100%" height="100%"> 
+			 		    <malt:Teams ClassName="Teams"  width="50%" height="100%" />
+			 		    <malt:PrebuildGroups ClassName="PrebuildGroups"  width="50%" height="100%" />
+		 		   </mx:HBox>
+		 		</mx:Canvas>
+		 		
+		 		 <mx:Canvas label="Bet types" width="100%" height="100%">
+		 			<mx:HBox width="100%" height="100%">
+			 			<malt:Events ClassName="Events" id="events"   width="100%" height="100%" /> 
+		 		   </mx:HBox>
+		 		</mx:Canvas>
+		 		
+		 
+		 		
+		 	</mx:Accordion> 
+ 		
+ 	</mx:HBox>
+ 
+</maltC:MaltContainer>

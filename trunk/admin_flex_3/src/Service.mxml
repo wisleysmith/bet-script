@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<malt:ServiceHolder       xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+<mx:Script>
+	<![CDATA[
+		
+		    import mx.rpc.events.FaultEvent;
+     
+			public function errore(e:FaultEvent):void
+			{
+				trace(e.fault.toString())
+			} 
+			
+		
+		 
+	]]>
+</mx:Script>
+
+<mx:RemoteObject 
+		id="svcHello" 
+		destination="zend" 
+		source="HelloWorld"
+		 fault="errore(event)"
+		> 
+		<mx:method name="say"    />
+	</mx:RemoteObject>
+	
+	  <mx:RemoteObject 
+		id="SportsID" 
+		destination="zend" 
+		source="Sports"
+		 fault="errore(event)"
+		> 
+		<mx:method name="selectSportRows"    />
+	    <mx:method name="insertSportRows"    />
+	    <mx:method name="updateSportRows"    />
+	    <mx:method name="deleteSportRows"    />
+	</mx:RemoteObject>
+	
+    <mx:RemoteObject 
+		id="GroupsID" 
+		destination="zend" 
+		source="Groups"
+		 fault="errore(event)"
+		> 
+		<mx:method name="selectGroupsRows"    />
+	    <mx:method name="insertGroupsRows"    />
+	    <mx:method name="updateGroupsRows"    />
+	    <mx:method name="deleteGroupsRows"    />
+	</mx:RemoteObject>
+
+
+</malt:ServiceHolder>

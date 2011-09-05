@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<malt:ServiceHolder       xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+   <mx:RemoteObject 
+		id="GroupsID" 
+		destination="zend" 
+		source="Groups"
+		 showBusyCursor="true"
+ 
+		> 
+		<mx:method name="selectGroupsRows"    />
+	    <mx:method name="insertGroupsRows"    />
+	    <mx:method name="updateGroupsRows"    />
+	    <mx:method name="deleteGroupsRows"    />
+	</mx:RemoteObject>
+	
+    
+
+
+</malt:ServiceHolder>

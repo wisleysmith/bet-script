@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<malt:ServiceHolder       xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+
+	  <mx:RemoteObject 
+		id="SupertotoID" 
+		destination="zend" 
+		source="Supertoto"
+		 showBusyCursor="true"
+      		> 
+	 
+ 	<mx:method name="insertSupertotoService"    />
+    <mx:method name="selectSupertoto"    />
+    <mx:method name="selectSupertotoTeams"    />
+    <mx:method name="deleteSupertoto"    />
+
+	      
+	</mx:RemoteObject>
+	
+    
+
+
+</malt:ServiceHolder>

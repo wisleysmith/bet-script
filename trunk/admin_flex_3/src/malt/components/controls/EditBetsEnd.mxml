@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow creationComplete="init()" xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+       >
+
+  <!-- <mx:StringValidator  
+        	source="{betName}" property="text" 
+            minLength="2" maxLength="100"
+            trigger="{updateButton}" triggerEvent="click" 
+			valid="updateName()"  
+        />
+ -->
+ 
+ 
+    <mx:Script>
+        <![CDATA[
+           	import malt.components.classes.CheckData;
+        	import mx.events.CloseEvent;
+        	import mx.collections.ArrayCollection;       
+            import mx.managers.PopUpManager;
+            import mx.controls.Text;
+            import mx.controls.Alert; 
+ 
+ 		    import malt.components.service.BetsAction;
+ 		    import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import malt.components.service.TeamsAction; 
+ 	           import malt.components.classes.CheckData;
+ 
+ 			 
+ 			 
+ 			 
+ 		    private var _checkData:CheckData;
+ 			
+ 			
+ 			 [Bindable]
+ 			public var cofirmGroup:String;
+ 			
+ 			 [Bindable]
+ 			public var resetGroup:String;
+ 			
+ 		
+ 			 
+ 		    private var _serviceTeam:TeamsAction;
+  
+ 			
+ 			
+ 		
+ 			
+ 			private var _betId:String; 			
+  
+ 
+ 			private var serviceBets:BetsAction;
+ 		 
+ 	  
+ 				[Bindable]
+ 			public var bet:ArrayCollection;
+ 					[Bindable]
+ 			public var  _betRepeater:ArrayCollection;
+
+ 			
+ 			private var betTypeId:uint;
+ 			
+ 			private var betId:uint;
+ 					
+     		
+     		public function  dataAC( betParam:Array,instance:Array   )
+     		{ 
+     			 
+	    _checkData=CheckData.getInstance(); 		
+     			   bet=new ArrayCollection(betParam); 
+     			   _betRepeater=new ArrayCollection(instance)
+     		     
+ 		   }
+     		
+     	 
+     	    
+     		private function init():void
+     		{
+     		   serviceBets=new BetsAction(); 
+	    _checkData=CheckData.getInstance(); 		
+     		   
+     	   	}
+ 
+           private function returnName():void 
+     	    { 
+                parentApplication.TabMain.call.bets()  ;
+                PopUpManager.removePopUp(this);
+            }
+     	 
+     	 public function setWinner(data):void
+     	 {
+     	 	oddtypes.text=data.oddname;
+     	 	oddvalues.text=data.odd;
+     	 	team.text=data.winner;
+     	 	betTypeId=data.betTypeId; 
+     	 }
+      
+      	 public function saveBetData():void
+	 	 {    
+	 	 	if(result.text.length==0)
+	 	 	{
+	 	 		Alert.show("Please insert result.");
+	 	 	}
+	 	 	{
+	 	 		serviceBets.corectTypeId=betTypeId
+	 	 		serviceBets.eventBetId=bet.getItemAt(0)['eventbetId'];  
+	 	    	serviceBets.updateData=result.text;  
+	 	     	serviceBets.callUpdateBetSaved(selectSavedBet); 
+	 	 	}
+           
+	 	  }
+     	 
+     	 public function selectSavedBet(event:ResultEvent):void
+     	 {
+     	 	trace(event.result)
+     	    if(_checkData.validation(event.result)) 
+	    	{
+     	 		returnName()
+     	 	}
+     	 	else
+     	 	{
+     	 		Alert.show("Winner is not saved, please try later.")
+     	 	}
+     	    event.currentTarget.removeEventListener("result",selectSavedBet);    
+     	 }
+		
+        ]]>
+    </mx:Script>
+
+  <mx:VBox width="100%"  height="100%" horizontalAlign="center"  verticalGap="0" horizontalGap="0">
+	 <mx:Button click="returnName()" label="Close" />
+ 
+ 
+	
+ 
+		 
+		
+		   <mx:HBox  >
+		   	<mx:Form>
+		   			 <mx:FormHeading label="Bet data:" />
+		 		      <mx:FormItem direction="horizontal" label="Bet:">
+		    		 		  <mx:Label    text="{bet.getItemAt(0)['betname']}" />    
+		    			 </mx:FormItem>  
+			 		    
+			 		  <mx:FormItem  direction="horizontal"  label="Event name:">
+			 		   	  <mx:Label text="{bet.getItemAt(0)['eventname']}" id="betName" width="100%"   />  
+			 		 </mx:FormItem>
+			 		  
+			 		  	 <mx:FormItem  direction="horizontal"  label="Bet active:">
+		    			   <mx:Label    text="{bet.getItemAt(0)['active']}" />   
+		    		   </mx:FormItem>
+		    		
+		    			 <mx:FormItem direction="horizontal" label="Bet ends:">
+		    		 		  <mx:Label    text="{bet.getItemAt(0)['dateinfo']}" />    
+		    			 </mx:FormItem>  
+		    			 
+		    		    <mx:FormItem direction="horizontal" label="Bet type:">
+		    		 		  <mx:Label    text="{bet.getItemAt(0)['eventtypename']}" />    
+		    			 </mx:FormItem>  
+	    		 </mx:Form>
+	    		 
+	    		 <mx:Form>
+		 		    
+		 		    
+  
+		 		    <mx:FormHeading label="Winner:" />
+		 		 <mx:FormItem direction="horizontal" label="Odd type:">
+	    		 		  <mx:Label   id="oddtypes"  text=" " />    
+	    			 </mx:FormItem>  
+		 		    
+		 		  <mx:FormItem  direction="horizontal"  label="Odd values:">
+		 		   	  <mx:Label id="oddvalues" text=" "   />  
+		 		 </mx:FormItem>
+		 		  
+		 		  	 <mx:FormItem  direction="horizontal"  label="Team:">
+	    			   <mx:Label  id="team"   text=" " />   
+	    		   </mx:FormItem>
+	    		
+	    				    		
+	    			 <mx:FormItem direction="horizontal" label="Insert result:">
+	    		 		  <mx:TextInput  id="result" />
+	    			 </mx:FormItem>  
+	    		
+	    			 <mx:FormItem direction="horizontal" label="Save winner:">
+	    		 		  <mx:Button label="Save" click="saveBetData()" />
+	    			 </mx:FormItem>  
+	    			 
+	    		    
+	    	 
+		 		 
+		 		  	</mx:Form>
+		   </mx:HBox>
+		 		   		
+		 	 	
+		 
+		  <mx:DataGrid  dataProvider="{_betRepeater}" width="100%" height="100%"   >
+			  	<mx:columns>
+			  		<mx:DataGridColumn  headerText="Odd types" dataField="oddname" /> 
+			  		<mx:DataGridColumn headerText="Odd values" dataField="odd"   />
+			  		<mx:DataGridColumn  headerText="Teams" dataField="winner"  />
+			  			<mx:DataGridColumn  headerText="Winner"  >
+			  			<mx:itemRenderer>
+			  				<mx:Component>
+			  					<mx:Button paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" width="100" label="Add as winner" click="{outerDocument.setWinner(data)}" />
+			  				</mx:Component>
+			  			</mx:itemRenderer>
+			  			</mx:DataGridColumn>  
+			  	</mx:columns>
+			  </mx:DataGrid>
+ 		   	
+ 		 
+ 	 		
+		 
+		
+ 
+ 	  
+		
+   </mx:VBox>
+   
+ 	 
+ 
+		  
+
+</mx:TitleWindow>  
