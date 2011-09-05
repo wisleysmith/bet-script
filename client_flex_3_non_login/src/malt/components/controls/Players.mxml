@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.components.controls.*"  xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 	
+ 	 	
+<mx:StringValidator  
+        	id="namedataValid"
+        	source="{namedata}" property="text" 
+            minLength="2" maxLength="50"
+              tooLongError="Maximalno 50 znakova"
+		    tooShortError="Minimalno 2 znakova"
+			 
+        />
+        
+  	 	
+<mx:StringValidator  
+        	id="lastnameValid"
+        	source="{lastname}" property="text" 
+            minLength="2" maxLength="50"
+                  tooLongError="Maximalno 50 znakova"
+		    tooShortError="Minimalno 2 znakova"
+		  
+        />       
+ 
+ <mx:StringValidator  
+        	id="usernameValid"
+        	source="{username}" property="text" 
+            minLength="5" maxLength="20"
+                 tooLongError="Maximalno 20 znakova"
+		    tooShortError="Minimalno 5 znakova"
+		  
+        />     
+ 	     
+ 	       
+      
+ 	     
+  <mx:EmailValidator 
+        	id="emailValid"
+        	source="{email}" property="text"  
+           	   
+        />     	     
+ 	
+ 	  <mx:StringValidator  
+        	id="passValid"
+        	source="{pass}" property="text" 
+            minLength="6" maxLength="20"
+               tooLongError="Maximalno 20 znakova"
+		    tooShortError="Minimalno 6 znakova"
+			  
+        />      	 
+ 	  	  
+ 	   <mx:StringValidator  
+        	id="retPassValid"
+        	source="{retPass}" property="text" 
+            minLength="6" maxLength="20"
+            tooLongError="Maximalno 20 znakova"
+		    tooShortError="Minimalno 6 znakova"
+        />      	
+        
+         	   <mx:StringValidator  
+        	id="pitanjeValid"
+        	source="{pitanje}" property="text" 
+            minLength="1" maxLength="50"
+            tooLongError="Maximalno 50 znakova"
+		    tooShortError="Minimalno 1 znakova"
+        />    
+        
+         	   <mx:StringValidator  
+        	id="odgovorValid"
+        	source="{odgovor}" property="text" 
+            minLength="1" maxLength="50"
+            tooLongError="Maximalno 50 znakova"
+		    tooShortError="Minimalno 1 znakova"
+        />      
+ 
+
+ 
+ 	  	<mx:VBox width="100%" height="100%" verticalAlign="middle" horizontalAlign="center" id="forma" >
+ 	  		<mx:Form>
+ 	  			<mx:FormItem label="Ime:">
+ 	  				<mx:TextInput id="namedata" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Prezime:">
+ 	  				<mx:TextInput id="lastname" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Korisničko ime:">
+ 	  				<mx:TextInput id="username" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Email:">
+ 	  				<mx:TextInput id="email" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Lozinka:">
+ 	  				<mx:TextInput id="pass" displayAsPassword="true" />
+ 	  			</mx:FormItem>
+ 	  			
+ 	  		    <mx:FormItem label="Potvrdi lozinku:">
+ 	  				<mx:TextInput id="retPass" displayAsPassword="true" />
+ 	  			</mx:FormItem>
+ 	  			  <mx:FormItem label="Tajno pitanje(potrebno za povratak lozinke):">
+ 	  				<mx:TextInput id="pitanje" />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Tajni odgovor:">
+ 	  				<mx:TextInput id="odgovor"  />
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem  direction="horizontal" >
+ 	  				<mx:Button label="Spremi"  id="saveButton" click="call.save()"  />
+ 	  				<mx:Button label="Poništi"   click="call.reset()" />
+ 	  			</mx:FormItem>
+ 	  		</mx:Form>	 
+	 	  	 <mx:Text id="registriranPoruka" fontSize="16" visible="false" includeInLayout="false">
+	 	 		<mx:text>Vaš račun je kreiran, sada se možete ulogirati</mx:text>
+	 	 	</mx:Text>
+ 	  	</mx:VBox>
+  
+ 	
+ 
+ 	
+ 
+</maltC:MaltContainer>

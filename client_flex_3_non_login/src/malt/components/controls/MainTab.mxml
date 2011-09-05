@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer   xmlns:malt="malt.components.controls.*" xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this);"   xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+  <mx:HBox width="100%">
+ 
+	      
+	      <mx:ToggleButtonBar id="mainTab" selectedIndex="0" itemClick="call.toogleButton(event)"> 
+    	   	<mx:String>Offer</mx:String>
+    	  	<mx:String>History</mx:String> 
+    	  </mx:ToggleButtonBar>
+    	  
+  		<!-- <mx:ComboBox id="oddFormat" change="call.changeCB()">
+        	<mx:String>decimal</mx:String>
+          	<mx:String>fractional</mx:String>
+            <mx:String>american</mx:String>
+        </mx:ComboBox>
+        -->
+  	
+  </mx:HBox>
+   
+</maltC:MaltContainer>
