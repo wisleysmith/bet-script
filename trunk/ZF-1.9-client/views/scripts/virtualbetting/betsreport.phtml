@@ -1,0 +1,86 @@
+<div id="content" class="clearfix"> 
+<?php 
+if(is_array($this->account))
+{ 
+	$dataArray=array();
+	foreach($this->account[0] as $a)
+	{
+		 $dataArray[$a['ticketId']]['data']=$a; 
+	}
+
+	foreach($this->account[1] as $a)
+	{
+		$dataArray[$a['ticketId']]['detail'][]=$a; 
+	}
+ 
+?>
+<style>
+td
+{
+	text-align:left;
+	margin:0px;
+	padding:0px;
+	vertical-align:top;
+}
+
+table
+{
+	margin:0px;
+	padding:0px;
+}
+
+</style>
+<table align="left" >
+ 
+ <tr>
+ 	<td class="topTD" width="150" >Vrijeme</td>
+ 	<td class="topTD"  width="70" >Ulog</td>  
+ 	<td class="topTD"  width="70" >Dobitak</td> 
+ 	<td class="topTD"  width="560" >Event</td> 
+ </tr>
+	<?php 
+		foreach($dataArray as $a)
+		{
+			 
+			?>
+			 <tr >
+			 	<td><?php echo $a['data']['created']; ?></td>
+			 	<td><?php echo $a['data']['fundsout'];?></td>
+			 	<td><?php echo $a['data']['win']; ?></td>
+			 	<td>
+			 	<table>
+			 	 <tr>
+				 	<td class="topTD" width="340" >Ime</td>
+				 	<td class="topTD" width="70" >Izbor</td>  
+				 	<td class="topTD" width="70" >Koef</td> 
+				 	<td class="topTD" width="70" >Rezultat</td> 
+				 </tr>
+			 	<?php
+			 	foreach($a['detail'] as $e)
+			 	{ 
+			 		echo '<tr>';
+				 	echo '	<td>'.$e['name'].'</td>';
+				 	echo '	<td>'.$e['cor'].'</td>';  
+				 	echo '	<td>'.$e['odd'].'</td>'; 
+				 	echo '	<td>'.$e['score'].'</td> ';
+				 	echo '</tr>'; 
+			 	}	
+			 	 ?>
+			 	 </table>
+			 	</td> 
+			 </tr> 
+			<?php 
+		}
+	?>
+	
+</table>
+</div>
+
+<?php 	
+}
+else
+{
+	echo "Nema razultata za traženo razdoblje";
+}	
+ 
+?>

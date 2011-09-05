@@ -1,0 +1,73 @@
+<!--BEGIN #content -->
+		<div id="content" class="clearfix"> 
+			<!--BEGIN #primary .hfeed-->
+			<div id="primary" class="hfeed"> 
+				<div id="category-blocks" class="clearfix">
+			   <!-- BEGIN #cateory-left .category-block -->
+					<div id="category-left" class="category-block alignleft">
+					<div id="leagues">
+					<h2>Izaberite ligu:</h2>
+					<?php 
+	 					 
+						 foreach($this->topLinks[1] as $t)
+						 { 
+							echo  '<span style="padding-right:25px;display:inline"><a linkid="'.$t[1].'" href="javascript:void(0)" >'.$t[0].'</a></span>';
+						 	 
+						 } 
+					?> 
+					</div> 	 
+					<br />		
+					 <h2>Tipovi oklada:</h2>	
+					<div id="types">
+						
+					</div>	
+				 	
+					<div id="typesLeagues">
+						
+					</div>		
+					<!-- END #cateory-right .category-block -->
+					</div>									
+				<!-- END #category-blocks -->
+
+				</div> 
+			<!-- BEGIN #category-blocks-summary -->
+				  
+				<div id="category-blocks-summary" class="clearfix">					
+					 
+					 
+				</div>
+			</div> 
+ 
+		<!--BEGIN #sidebar .aside-->
+		<div id="sidebar" class="aside">
+ 			<div>Listić</div>
+ 			
+ 				<p>Oklada vidljiva:<br/>
+				<input type="radio" checked id="ticketVis1" name="ticketVis" value="1">Svima
+				<input type="radio" id="ticketVis2" name="ticketVis" value="2" >Prijateljima
+				<input type="radio"  id="ticketVis3" name="ticketVis" value="3">Nikom
+				</p>
+				<p>Uključi komentar oklade:<br/>
+				<input type="checkbox"  id="commentAlive" /><br/>
+				<textarea rows="5" style="display:none" id="commentBox" cols="50"></textarea>		
+				</p>
+ 			
+  			<div id="ticket">
+  				
+  				
+  			</div>
+  			Uplata:
+  			<div id="betTicketInput">
+  				<input  style="width:50px;"  type="text" id="stake" />
+  				Koeficijent:<span style="padding-right:10px;"  id="odds"></span>
+  				Mogući dobitak:<span id="possibleWinning"> </span> <br/>
+  				<input type="button" class="buttonSubmit" value="Uplati" id="betButton" />
+  			</div>
+  	  
+		<!--END #sidebar .aside-->
+
+		</div>
+
+		<!-- END #content -->
+		</div>
+ 
