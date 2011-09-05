@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<malt:ServiceHolder       xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+   <mx:RemoteObject 
+		id="PlayersID" 
+		destination="zend" 
+		source="Players" 
+		 showBusyCursor="true"
+		> 
+		
+		<mx:method name="insertPlayersService"    />
+		<mx:method name="selectPlayersService"    />
+		<mx:method name="updateUserData"    />
+		
+     
+		
+	</mx:RemoteObject>
+	
+    
+
+
+</malt:ServiceHolder>

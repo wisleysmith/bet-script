@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer   xmlns:malt="malt.components.controls.*" xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this);"   xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+<mx:Script>
+	<![CDATA[
+		import mx.controls.Alert;
+	[Bindable]
+	public var sizeOfBetCanvas:int;
+	
+	[Bindable]
+	private var uvod:String="You will get 100 virtual points for start\n"
+						   +"Every monday you will get additional 10 virtual points.\n"  
+			                +"Select sport in top left corner.\n" 
+		  	                +"Then select Type of bet.\n"
+		  	                 +"Place your bet.\n" ;
+	
+		  public function formatData(object:*):String
+		   {
+		   	if(object.name.length>25)
+		   	{ 
+		   	 var data=object.name;
+		 	 data=data.substring(0,25); 
+		     return data+"..."; 
+		   	}
+		   	else
+		   	{
+		   		return object.name
+		   	}
+		   	
+		   } 
+	]]>
+</mx:Script>
+  <mx:VBox  height="100%" width="100%"  id="box"  > 
+	 
+ 
+	
+	   <mx:HBox verticalGap="0" horizontalGap="0">
+	   		 	<mx:Label text="Sports:"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  />
+	 	<mx:MenuBar   width="100%"    itemClick="call.selectBet(event)" labelFunction="formatData" id="sportsAndGroupsVMC" />
+	   </mx:HBox>
+
+						
+		  	 <mx:HBox  width="100%"  verticalGap="0" horizontalGap="0">
+			  	 
+<mx:Label id="sportName" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  />
+			  	    <mx:Label text="Type of bet:"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  />
+				  	 	<mx:Tile direction="horizontal"  verticalGap="0" horizontalGap="0"   width="100%" >
+		   		    	 <mx:Repeater id="betEventRepeater"    width="100%"  >
+				  	 	 <mx:LinkButton paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0" label="{betEventRepeater.currentItem.name+'  ('+betEventRepeater.currentItem.num+')'}"  click="call.loadBets(event.target.instanceIndices)"   />
+				  	 	  
+				  	 </mx:Repeater>
+		   		      </mx:Tile> 
+			
+		   	 </mx:HBox>
+		   	
+		  <mx:ViewStack id="betViewStack" creationPolicy="all" width="100%" height="100%">
+		   <mx:Canvas width="100%" height="100%"  >
+		  <mx:VBox width="100%" height="100%" verticalAlign="top" horizontalAlign="center" >
+		    <mx:Text fontSize="13" text="{uvod}" />
+		   </mx:VBox>
+		   </mx:Canvas>
+		   <mx:Canvas width="100%" height="100%">
+		     <mx:VBox width="100%" height="100%" verticalAlign="top" horizontalAlign="center" >
+		 	      <mx:Label fontSize="15" text="Select Type of bet." />
+		   </mx:VBox>
+	
+		   </mx:Canvas>
+		         <mx:Canvas width="100%" height="100%">
+		      <mx:VBox width="100%" height="100%" verticalAlign="top" horizontalAlign="center" >
+		 	        <mx:Label fontSize="15" text="There are no events." />
+		     </mx:VBox>
+	 	  </mx:Canvas>
+		  
+		  <mx:Canvas    width="95%"   horizontalScrollPolicy="off" > 
+		   	    <mx:Panel  verticalGap="0" horizontalGap="0" width="100%" id="betsPanel"   paddingTop="45">
+		   	 	 <mx:Repeater   id="betEventData"    width="100%"  >
+				  	 	<mx:VBox      width="95%" paddingBottom="0"     
+ 						 horizontalGap="0"    >
+				  	 	<mx:HBox  backgroundColor="black"  dropShadowEnabled="true" borderStyle="solid"  paddingBottom="0"  borderThickness="1"   
+ 						 horizontalGap="0"  color="white"  >
+				  	 		 <mx:Label  paddingBottom="0" paddingLeft="0" fontWeight="bold" paddingRight="5" paddingTop="-0" text="{betEventData.currentItem.nameBet}   "   />
+				  	 		  <mx:Label paddingBottom="0" paddingLeft="0"   paddingRight="5" paddingTop="0" text="Ends:{betEventData.currentItem.dateinfo}"   />
+				  	 		   <mx:LinkButton   fontWeight="bold"  width="50"    click="{call.loadBetsAdd(event.currentTarget.getRepeaterItem().betId)}"   label="+{betEventData.currentItem.count}"   />
+				  	 	</mx:HBox>
+				  	 	 
+				  	 	      <mx:Tile  tileHeight="20" width="600" direction="horizontal"  paddingBottom="0"  verticalGap="0" horizontalGap="0" > 
+				  	 	      <mx:Repeater    id="reps"  dataProvider="{betEventData.currentItem.databets}" >
+			   		    			   <mx:LinkButton color="white"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"   verticalGap="0" horizontalGap="0"   click="{call.addBet(event.target.instanceIndices)}"   label="|{reps.currentItem.oddname  +' - '+ reps.currentItem.odd}|"    /> 
+			   		    	  </mx:Repeater>    
+				  	 	      </mx:Tile>
+			   		    	 
+			   		    
+				  	 	</mx:VBox>
+				   	</mx:Repeater> 
+		   	    </mx:Panel>
+		   	  	</mx:Canvas>
+		  	
+		  </mx:ViewStack>
+ 
+		   	
+		  
+ 
+ </mx:VBox> 
+</maltC:MaltContainer>
