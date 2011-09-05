@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<malt:MaltContainer xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this);"   xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 		
+   	  	  
+      
+ 	
+ 	      	 	  <mx:NumberValidator  
+        	id="fundsValid"
+        	source="{stake}" property="text" 
+            allowNegative="false"
+            minValue="0.1"   domain="real"
+        />  
+ 
+ <mx:Script>
+ 	<![CDATA[
+ 	    public var parentHeight:Number
+        public var parentWidth:Number
+   
+ 	]]>
+ </mx:Script>
+ 
+  <mx:VBox width="100%" height="100%" id="mainVBox" >
+	 
+		 	
+		 	<mx:Form  >
+		 	<mx:FormHeading label="Listić:" />
+		 	<mx:FormItem label="Ulog:">
+		 	 <mx:TextInput change="call.setWin()" width="60"   id="stake" />
+		 	 
+		 	</mx:FormItem>
+		    <mx:FormItem label="Koeficijent:">
+		 			 <mx:Label id="odd" />
+		 	</mx:FormItem>
+	 	<mx:FormItem label="Dobitak:">
+		 			 <mx:Label id="win" />
+		 	</mx:FormItem> 
+		 
+		 	</mx:Form>
+		 		
+		 		<mx:HBox >
+		 			 <mx:CheckBox id="checkBoxSystem" selected="false" change="call.createSystem()" />
+		 			<mx:ComboBox id="systemBets"  width="80" enabled="false"  change="call.createCombionation(event)"   prompt="Izaberi sistem:"  />
+		 		</mx:HBox>
+		 
+		    <mx:Label id="comStake" visible="{checkBoxSystem.selected}" includeInLayout="{checkBoxSystem.selected}" />
+		     <mx:Label id="comWin" visible="{checkBoxSystem.selected}" includeInLayout="{checkBoxSystem.selected}" />
+		 	 <mx:LinkButton id="comList" visible="false" includeInLayout="false"  label="Lista kombinacija"  click="call.comList()" />
+		 	 <mx:Button  label="Oklada"   id="saveEvent"  click="call.placeBet()" />
+		 		<mx:Repeater id="r"  >
+		 		 
+			 			<mx:HBox width="100%"    >
+			 			 
+			 				<mx:Text paddingLeft="0" paddingRight="0"  width="100%" text="{r.currentIndex+1}. {r.currentItem.name}"   />	
+			 				<mx:Button  paddingLeft="0" paddingRight="0"        
+    width="15" height="15"   
+ 	  click="call.removeBet(event.target.instanceIndices)" />
+			 		    </mx:HBox>
+			 			<mx:HBox width="100%" borderColor="black"  paddingLeft="0" paddingRight="0"   >
+			 				<mx:Label  text="Izbor:{r.currentItem.oddname}" width="100%" />
+			 				<mx:Label  text="Koeficijent:{r.currentItem.odd}" />
+			 			</mx:HBox> 
+		 	 </mx:Repeater>
+		 
+		  
+  	
+  </mx:VBox>
+</malt:MaltContainer>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<malt:MaltContainer xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this);"   xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 		
+   	  	  
+      
+ 	
+ 	      	 	  <mx:NumberValidator  
+        	id="fundsValid"
+        	source="{stake}" property="text" 
+            allowNegative="false"
+            minValue="0.1"   domain="real"
+              triggerEvent="click" 
+        />  
+ 
+  <mx:Script>
+ 	<![CDATA[
+ 	    public var parentHeight:Number
+        public var parentWidth:Number
+ 	]]>
+ </mx:Script>
+  <mx:VBox width="100%" height="100%" verticalGap="0" horizontalGap="0">
+ 
+		 	
+		 	<mx:Form verticalGap="0" horizontalGap="0">
+		 	<mx:FormHeading label="Listić:" />
+		 	<mx:FormItem label="Ulog:">
+		 	 <mx:TextInput change="call.setWin()" width="80"  id="stake" />
+		 	</mx:FormItem>
+		    <mx:FormItem label="Koeficijent:">
+		 			 <mx:Label id="odd" />
+		 	</mx:FormItem>
+		 	<mx:FormItem label="Dobitak:">
+		 			 <mx:Label id="win" />
+		 	</mx:FormItem>
+ 
+		 	<mx:FormItem label="Kombinacije:" direction="horizontal">
+		 		<mx:CheckBox id="checkBoxSystem" selected="false" change="call.createSystem()" />
+		 		<mx:ComboBox id="systemBets"  width="80" enabled="false"  change="call.createCombionation(event)"   prompt="Izaberi sistem" />
+		 	</mx:FormItem>
+		 	 <mx:FormItem  id="comList" visible="false" includeInLayout="false" >
+		 		 <mx:LinkButton label="Lista kombinacija"  click="call.comList()" />
+		 	</mx:FormItem>
+		    <mx:FormItem>
+		 			<mx:Button label="Oklada" id="saveEvent"  click="call.placeBet()" />
+		 	</mx:FormItem>
+		 	</mx:Form>
+		 	
+		 		<mx:Repeater id="r"  >
+		 		 
+			 			<mx:HBox width="100%" >
+			 				<mx:Label text="{r.currentIndex+1}."   />	
+			 				<mx:Text  width="100%" text="{r.currentItem.name}"   />	
+			 				<mx:Button  paddingLeft="0" paddingRight="0"    width="15" height="15"  
+			 				upSkin="@Embed('gumbx.png')"
+		overSkin="@Embed('gumbx.png')"
+		downSkin="@Embed('gumbx.png')"
+ 	  click="call.removeBet(event.target.instanceIndices)" />
+			 		    </mx:HBox>
+			 			<mx:HBox width="100%"  bottom="black"  >
+			 				<mx:Label  text="Izbor:{r.currentItem.oddname}" width="100%" />
+			 				<mx:Label  text="Koeficijent:{r.currentItem.odd}" />
+			 			</mx:HBox> 
+		 	 </mx:Repeater>
+		  
+		  
+  	
+  </mx:VBox>
+</malt:MaltContainer>

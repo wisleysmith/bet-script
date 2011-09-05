@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer xmlns:mccune="com.dougmccune.controls.*"      xmlns:malt="malt.components.controls.*" xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this);"   xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+<mx:Script>
+	<![CDATA[
+	
+	    	import mx.core.ScrollPolicy;
+        	import com.dougmccune.controls.ScrollableArrowMenu;
+        	import com.dougmccune.controls.ScrollableMenu;
+
+            import mx.events.MenuEvent;
+            import mx.controls.Alert;
+            import mx.collections.*;
+
+		
+			[Bindable]
+			public var arrowScrollPolicy:String = ScrollPolicy.OFF;
+			
+			[Bindable]
+			public var vertScrollPolicy:String = ScrollPolicy.ON;
+		  private var  naslovnaLoader:URLLoader ;
+			private var naslovnaXML:XML = new XML();
+            
+
+
+
+
+	
+	[Bindable]
+	public var uvod:String=" " 
+					    	 
+	
+		  public function formatData(object:*):String
+		   {
+		   	if(object.name.length>25)
+		   	{ 
+		   	 var data=object.name;
+		 	 data=data.substring(0,25); 
+		     return data+"..."; 
+		   	}
+		   	else
+		   	{
+		   		return object.name
+		   	}
+		   	
+		   }
+		   
+		private function loadedData(){
+			   var naslovna_URL:String="naslovna.xml"; 
+	   			 
+	   			  var naslovnaXMLURL:URLRequest = new URLRequest(naslovna_URL);
+	   			  naslovnaLoader=new URLLoader(naslovnaXMLURL)
+				 naslovnaLoader.addEventListener("complete", naslovnaLoaded);
+	  			
+		}       
+ 
+	   
+	   public function naslovnaLoaded(event)
+	   {
+	   	 naslovnaXML = XML(naslovnaLoader.data);
+	   	uvod=naslovnaXML.children()[0] ;
+	   }
+		    
+            
+	]]>
+</mx:Script>
+  <mx:VBox width="100%" height="100%" id="box"> 
+	 
+	 <mx:HBox>
+  	<mx:Label text="Hattrick:"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  />
+
+<mccune:ScrollableMenuBar   width="100%"   verticalScrollPolicy="{vertScrollPolicy}" arrowScrollPolicy="{arrowScrollPolicy}"         itemClick="call.selectBet(event)" labelFunction="formatData" id="sportsAndGroupsVMC" />
+	  
+	  		</mx:HBox> 
+	   <mx:VBox width="100%" height="100%" >
+		   
+		  	<mx:ViewStack width="100%" id="mainVS" height="100%"  >
+		  		
+				<mx:Canvas>
+					<mx:Text paddingTop="30" creationComplete="loadedData()" fontSize="15" width="100%" htmlText="{uvod}" >
+					 
+						
+					</mx:Text>
+				</mx:Canvas>
+		  	
+		  		<mx:Canvas width="100%" height="100%">
+					
+				<mx:VBox width="100%" height="100%">
+					
+		  	 <mx:HBox  width="100%" >
+				  	 	<mx:Tile direction="horizontal"    width="100%" >
+		   		    	 <mx:Repeater id="betEventRepeater"    width="100%"  >
+				  	 	 <mx:LinkButton paddingBottom="0" paddingTop="0" label="{betEventRepeater.currentItem.name+'  ('+betEventRepeater.currentItem.num+')'}"  click="call.loadBets(event.target.instanceIndices)"   />
+				  	 	  
+				  	 </mx:Repeater>
+		   		    			</mx:Tile>
+				  	
+		   	 </mx:HBox>
+ 
+		   	<mx:DataGrid verticalScrollPolicy="on"  id="rep" width="100%" height="{this.height-100}" variableRowHeight="true" wordWrap="true"> 
+		   		<mx:columns>	   		   
+		   		    <mx:DataGridColumn  headerText="Događaj" dataField="nameBet" />
+		   		   <!--		 <mx:DataGridColumn  headerText="Tip" dataField="eventname" />-->
+		   	<mx:DataGridColumn  headerText="Završava" dataField="dateinfo"  width="150"  /> 
+	
+		   		    <mx:DataGridColumn  headerText="Koeficijenti"  >
+		   		    <mx:itemRenderer>
+		   		    	<mx:Component>
+		   		    		<mx:Tile direction="horizontal">
+		   		    			<mx:Repeater id="reps" dataProvider="{data.databets}">
+			   		    			    <mx:LinkButton      click="{outerDocument.call.addBet(data,data.databets,event.target.instanceIndices)}"  label="|{reps.currentItem.oddname  +'-'+ reps.currentItem.odd}|"  /> 
+			 		  			 </mx:Repeater> 
+		   		    			</mx:Tile>
+		   		     
+		   		    	</mx:Component>
+		   		    </mx:itemRenderer>
+		   		    </mx:DataGridColumn>
+		   		   	 	<mx:DataGridColumn width="70">
+		   		   	 		<mx:itemRenderer>
+		   		   	 			<mx:Component>
+		   		   	 					<mx:LinkButton  click="{outerDocument.call.loadBetsAdd(data.betId)}"  label="+{data.count}" />
+		   		   	 			</mx:Component>
+		   		   	 		</mx:itemRenderer>
+		   		   	 	</mx:DataGridColumn>
+		   		</mx:columns>
+		   	</mx:DataGrid>
+		   	
+	     </mx:VBox>
+	 </mx:Canvas>
+	 </mx:ViewStack>
+		  	 
+	  	 </mx:VBox>
+  </mx:VBox>
+</maltC:MaltContainer>

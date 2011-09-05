@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+ 
+     
+<mx:TitleWindow   xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+       >
+
+ <mx:Script>
+ 	<![CDATA[
+ 		import mx.collections.ArrayCollection;
+        import mx.managers.PopUpManager;
+        import malt.components.controls.SystemBetsOverview;
+        import mx.managers.PopUpManager;
+ 		
+ 	
+ 		private var _cash
+ 		[Bindable]
+ 		private var main:ArrayCollection ;
+ 		private var D:Array=new Array();
+ 		public function dataAC(data:Array,system,win,winner):void
+ 		{
+ 			_cash=win
+ 			var odds:Number=1;
+ 			main=new ArrayCollection(data);
+ 			for(var i:uint=0;i<data.length;i++)
+ 			{
+ 				 odds=odds*data[i][4] 
+ 			}
+ 		    systemLable.label= "Sistem: "+system
+     	  
+     	  if(system=="1/1")
+     	  {
+     	  	var zadob:Number=win*odds;
+     	  	winLabel.text= "Za dobiti: "+(zadob.toFixed(2))
+     	  }
+     	  else
+     	  {
+     	  	 createCombionation(system)
+     	  	   comList(data,win)
+     	  } 
+     	    winerLabel.text="Dobitak: "+winner.toFixed(2)
+     	   
+     	   
+     	 
+ 		}
+ 		
+ 		public function comList(data,win):void
+  	  	{
+  	  		var mainMoney:Number=0;
+  	  		//var str= D.join("\n")
+  	  		var string:ArrayCollection=new ArrayCollection()
+  	  		 for(var io:uint=0;io<D.length;io++)
+			 {
+			 	var oodCounter=win;
+			 	var test:Array = D[io].split("/")
+			    var oddCounter:Number=1;
+			    var innerAc:ArrayCollection=new ArrayCollection();
+			    for(var ioo:uint=0;ioo<test.length-1;ioo++)
+			    {
+			    	    oodCounter=oodCounter*data[test[ioo]-1][4];    
+				}  
+	 
+				mainMoney=mainMoney+oodCounter;
+					 
+			 }  
+  	        
+  	  		 	  	winLabel.text= "Za dobiti: "+mainMoney.toFixed(2);
+  	  	}
+ 		
+ 			 public function cancel():void
+ 	  		 {
+     		 	PopUpManager.removePopUp(this); 
+     		 }
+ 	 
+         public function Comb(n:uint, a:Array, z, D:Array) 
+		{
+			 
+			if (n==0) 
+			{ 
+				D[D.length] = z ; return 
+			}
+			for (var j=0 ; j < a.length ; j++)
+			 { 			
+			  Comb(n-1, a.slice(j+1), z+a[j], D)
+			 } 
+ 
+			return  
+		}
+		
+		public function createCombionation(system)
+  	  	{ 
+  	  		var str:String = system
+			var a:Array = str.split(/\//); 
+			 var data:Array=new Array();
+  
+			  for(var io:uint=0;io<a[1];io++)
+			 {
+			 	data[io]=io+1+"/"  
+			 }  
+		 
+			Comb(a[0],  data , "", D)  ;
+		 
+ 
+  	  	}
+ 		
+ 		public function createLinkSystem():void
+ 		{
+ 				//var str= D.join("\n")
+  	  		var string:ArrayCollection=new ArrayCollection()
+  	  		 for(var io:uint=0;io<D.length;io++)
+			 {
+			 	var test:Array = D[io].split("/")
+			    	 var oddCounter:Number=1;
+			         var innerAc:ArrayCollection=new ArrayCollection();
+			    	 for(var ioo:uint=0;ioo<test.length-1;ioo++)
+					 {
+					// main.getItemAt(test[ioo]-1)['odd'] 
+					 //	,"oddname":main.getItemAt(test[ioo]-1)['oddname']
+					 		 innerAc.addItem({"name":main.getItemAt(test[ioo]-1)['evenName'],"oddname":main.getItemAt(test[ioo]-1)['youBetTypeId'],"odddec":main.getItemAt(test[ioo]-1)['odd']});
+					   		 oddCounter=oddCounter*main.getItemAt(test[ioo]-1)['odd'] 
+					  }   
+					 var comString:String=D[io];
+					 var bla:String= comString.substr(0,comString.length-1 )
+					 var cashTotal:Number=oddCounter*_cash;
+					 string.addItem({"system":bla,"oddCounter":oddCounter.toFixed(2),"children":innerAc,"win":cashTotal.toFixed(2)}) 
+					 
+			 }  
+  	             var login:SystemBetsOverview=SystemBetsOverview(PopUpManager.createPopUp(this, SystemBetsOverview , true));
+   
+
+                login.width=800
+                login.height=500
+                login.dataAC( string);  
+ 		}
+ 		
+ 		
+ 	]]>
+ </mx:Script>
+     <mx:VBox width="100%" height="100%"  verticalGap="0" horizontalGap="0" >
+     	<mx:Button label="Zatvori" click="cancel()" />
+     		<mx:HBox width="100%">
+     			<mx:LinkButton id="systemLable" click="createLinkSystem()" />
+     			<mx:Label id="winLabel" />
+     			<mx:Label id="winerLabel" />
+     		</mx:HBox>  
+     	<mx:DataGrid variableRowHeight="true"  wordWrap="true" dataProvider="{main}"  width="100%" height="100%" >
+     		<mx:columns>
+     			<mx:DataGridColumn  headerText="Događaj" dataField="evenName" />
+     			<mx:DataGridColumn width="200"  headerText="Tip oklade" dataField="eventTypeName" /> 
+     			<mx:DataGridColumn  headerText="Završava" width="150"  dataField="end" />
+     			<mx:DataGridColumn  headerText="Koeficijenti" width="80"  dataField="odd" />
+     			<mx:DataGridColumn headerText="Rezultat" width="80" dataField="result" />
+     			<mx:DataGridColumn  width="100" headerText="Status" >
+     				<mx:itemRenderer>
+     					<mx:Component>
+     								<mx:VBox width="100%" height="100%">
+     						<mx:Script>
+     							<![CDATA[
+     								public function testResult(your:String,system:String ):String
+     								{
+     									var returnValue:String; 
+	     						 
+	     									if(system=="--")
+     									   {
+     									   	 returnValue="nema razultata"
+     									   }
+	     									
+	     									else if(your==system)
+	     									{
+	     										returnValue= "pobjeda";
+	     									}
+	     									
+     									   else if(system==null)
+     									   {
+     									   	 returnValue="nema rezultata"
+     									 
+     									   }
+     									   else if(your!=system)
+	     									{
+	     								         returnValue= "gubitak";
+	     									} 
+     									   
+     									   
+     								 
+     									
+     						 
+     								   return returnValue;
+     							
+     								}
+     							]]>
+     						</mx:Script>
+     						
+     				
+     							<mx:Label text="{testResult(data.youBetTypeId,data.corectBetTyp)}" />
+     						</mx:VBox>
+     					</mx:Component>
+     				</mx:itemRenderer>
+     			</mx:DataGridColumn>     			
+     		</mx:columns>
+     	</mx:DataGrid>
+     </mx:VBox>
+</mx:TitleWindow>  
