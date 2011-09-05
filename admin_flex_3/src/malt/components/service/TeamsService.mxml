@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<malt:ServiceHolder       xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+   <mx:RemoteObject 
+		id="TeamsID" 
+		destination="zend" 
+		source="Teams"
+  showBusyCursor="true"
+		> 
+		<mx:method name="selectTeamsRows"    />
+	    <mx:method name="insertTeamsRows"    />
+	    <mx:method name="updateTeamsRows"    />
+	    <mx:method name="deleteTeamsRows"    />
+	    <mx:method name="prebuildGroups"    />
+	    <mx:method name="addNewTeams"    />
+	    <mx:method name="selectPreteamsService"    />
+	     <mx:method name="insertPrebuildTeamsService"    />
+	    
+	</mx:RemoteObject>
+	
+    
+
+
+</malt:ServiceHolder>

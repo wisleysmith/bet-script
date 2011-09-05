@@ -1,0 +1,638 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow creationComplete="init()" xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+   >
+
+   <mx:StringValidator  
+        	source="{betName}" property="text" 
+            minLength="2" maxLength="100"
+            trigger="{updateButton}" triggerEvent="click" 
+			valid="updateName()"  
+        />
+ 
+ 
+ 
+    <mx:Script>
+        <![CDATA[
+           	import malt.components.classes.CheckData;
+        	import mx.events.CloseEvent;
+        	import mx.collections.ArrayCollection;       
+            import mx.managers.PopUpManager;
+            import mx.controls.Text;
+            import mx.controls.Alert; 
+ 		    import mx.events.DragEvent;
+			import mx.managers.DragManager;
+ 		    import malt.components.service.BetsAction;
+ 		    import mx.events.ItemClickEvent;
+			import mx.rpc.events.ResultEvent;
+			import malt.components.service.TeamsAction; 
+ 			 			
+			[Bindable]
+ 			public var repData2:ArrayCollection; 	
+ 			
+ 		    [Bindable]
+ 			public var sportData:ArrayCollection;
+ 			
+ 		    [Bindable]
+ 			public var betTypesData:ArrayCollection; 
+ 			
+ 			 [Bindable]
+ 			public var nameBet:String; 
+	 		
+  
+ 			 [Bindable]
+ 			public var stringFormat:String;
+ 			
+ 				[Bindable]
+ 			public var stringFormatActive:String;
+ 			
+ 		    [Bindable]
+ 			public var myRepTeamBet:ArrayCollection;
+ 		
+ 		   [Bindable]
+ 		   private var _betRepeater:ArrayCollection;
+ 			
+ 			 private var _bets ;
+ 		 
+	 		 
+ 	        private var _checkData:CheckData;
+ 			private var serviceBets:BetsAction;
+ 			
+ 	        private var comboTrackerIfUpdateFail:uint;
+ 			
+ 		    private var betType:uint; 
+ 		    
+ 		    private var nameDragBet:String ;
+            private var nameTeamsBet:uint ;   
+            private var eventIdTeams:uint;
+            private var _serviceTeams:TeamsAction ;
+ 		    
+ 			[Bindable]
+ 			public var betTypeSelectedIndex:uint;
+ 			
+ 		   [Bindable]
+ 			public var teams:ArrayCollection; 
+ 			
+ 			[Bindable]
+ 			public var bet:ArrayCollection; 
+ 			
+ 				[Bindable]
+ 			public var betData:ArrayCollection;
+ 			
+ 		 
+ 			
+ 			private var betId:uint;
+ 					
+     		
+     		public function  dataAC( betParam:Array,instance:Array,teams:Array,events:ArrayCollection  )
+     		{ 
+     			 
+	 			   _checkData=CheckData.getInstance(); 		
+     			   bet=new ArrayCollection(betParam); 
+     			   betType=bet.getItemAt(0)['eventId'];
+     			   eventIdTeams=bet.getItemAt(0)['eventbetId'];
+     			   stringFormat =bet.getItemAt(0)['dateinfo'];
+     			   stringFormatActive =bet.getItemAt(0)['active'];
+     		       nameBet=bet.getItemAt(0)['eventname'];
+     		       betId=bet.getItemAt(0)['betId'] ; 
+     		       _betRepeater=new ArrayCollection(instance) ; 
+     			  betTypesData=  events ;  
+     			   teamsTableData.dataProvider=new ArrayCollection(teams)
+     		 
+     		
+     		   setBetTypeIndex(betTypesData);
+     			   
+ 		   }
+     		
+     		private function setBetTypeIndex(data:ArrayCollection):void
+     		{
+     			var len:uint=data.length;
+     			for(var i:uint=0;i<len;i++)
+     			{
+     			    if(data.getItemAt(i)['eventId']== betType)
+     				{  
+     				    betTypeSelectedIndex=i	 
+     					break
+     				}
+     				
+     			}
+     		   
+     		}
+     		
+     	 
+     		 
+     		 
+   
+     	    private function returnName():void 
+     	    { 
+     	        parentApplication.TabMain.call.bets()  ;
+                PopUpManager.removePopUp(this);
+            }
+     		
+            private function changeNameBetType(text,data):void
+		    {
+			    _betRepeater.getItemAt(data)["oddname"]=text;
+		    }
+		
+		 
+		
+		    private function callDeleteType(data:uint):void
+		    {
+			      repData2.removeItemAt(data);
+		    }
+     		
+     		public function nameResultData(event):void
+     		{ 
+     		    if(_checkData.validation(event.result)) 
+		        {
+		          betName.text= String(event.result)
+	     		}
+	     		else
+	     		{
+	     			betName.text=betName.text
+	     		} 
+	     		
+         	event.currentTarget.removeEventListener("result",nameResultData); 
+     		}
+     		
+     	
+     		
+     	    
+     		private function init():void
+     		{
+     		   serviceBets=new BetsAction();
+     		   _serviceTeams=new TeamsAction();
+     		   
+     	   	}
+
+     		  public function groupResultData(event):void
+     		{  
+     			 //setGroupIndex(event)
+     		}
+
+     		  
+     		private function betResponse(event):void
+     		{
+     			var array=event as Array 
+     			//	betTypesInstances=new ArrayCollection(event as Array) 
+     	       event.currentTarget.removeEventListener("result", betResponse); 
+     		}
+     		
+     
+	 	  	  
+     		
+     		public function betTypeChangeResponse(event):void
+     		{
+     			var array:Array=event as Array;
+     			var len:uint=array.length;
+     			var tempAC:ArrayCollection=new ArrayCollection();
+     			for(var ie:uint=0;ie<len;ie++)
+		   		{ 
+		   	   		tempAC.addItem({"oddname":array[ie][1]})
+		   		 }
+     			
+     		     event.currentTarget.removeEventListener("result",betTypeChangeResponse); 
+     		//	betTypesInstances=new ArrayCollection(tempAC.toArray())
+     		}
+     		 
+     		public function addNewData():void
+     		{
+     		//	betTypesInstances.addItem({"oddname":eventType.text,"odd":eventTypeOdd.text,"saved":"new"});
+     		}
+     		
+     		public function formatBetTypeButton(data):String
+     		{
+     			if(data=="new")
+     			{
+     				return "Confirm";
+     			}
+     			else
+     			{
+     				return "Update";
+     			}
+     			
+     		}
+     		
+     		public function callDeleteTypeData(id):void
+     		{
+     		//	model('BetsModel').betsIdType=betTypesInstances.getItemAt(id)['betTypeId']
+     			serviceBets.callDelete(betResponse)
+     		}
+     		
+     		public function addNewBetTypeToBase(data,id,oddname,odd):void
+     		{ 
+     			if(data=="Update")
+     			{
+     		//		var array:Array=new Array([oddname,odd,betTypesInstances.getItemAt(id)['betTypeId']])
+     		//		model('SportsBetsModel').updateBetType=array;
+     				serviceBets.callUpdateBetType(betResponse)
+     			}
+     			else
+     			{
+     			//	var array:Array=new Array([oddname,odd, model('SportsBetsModel').groupIdEdited])
+     		//		model('SportsBetsModel').insertBetType=array;
+     				serviceBets.callInsertBetType(betResponse)
+     			}
+     	    }
+     	 
+         public  function dragEnterHandlerBox(event:DragEvent):void 
+         {
+        	    DragManager.acceptDragDrop(VBox(event.currentTarget));
+         }
+                
+          public  function dragDropHandler(event:DragEvent):void 
+          { 
+            	//event.currentTarget.text=model('TeamsModel').selectedDrag
+          }
+     	    
+     	  public function dragDropHandlerHBox(event:DragEvent):void
+          { 
+          	     serviceBets.newTeamId= nameTeamsBet;
+     			 serviceBets.betsId=betId;
+     			 serviceBets.callAddNewTeamToEventService(resultAddNewTeam);
+          }
+          
+         private function get call()
+     	 {
+     			return _bets
+     	 }
+
+           public  function dragEnterHandler(event:DragEvent):void 
+        {
+           
+                var dropTarget:TextInput=event.currentTarget as TextInput;
+                DragManager.acceptDragDrop(dropTarget);
+         }
+         
+         private function loadNewData(event:ResultEvent):void
+         {
+         	
+         	  if(_checkData.validation(event.result))
+			    {  
+               		 var arr:Array=event.result as Array;
+               		 dataAC( arr[0],arr[1],arr[2],arr[2] );  
+                 }
+                 
+                  event.currentTarget.removeEventListener("result",loadNewData); 
+         	
+         }
+          
+          
+            
+            public function eventDataResult(event:ResultEvent)
+            {
+            	betData=new ArrayCollection(event.result[0] as Array)
+            	myRepTeamBet=new ArrayCollection(event.result[1] as Array)
+                event.currentTarget.removeEventListener("result",eventDataResult); 
+             }
+			
+		 
+			  
+	    public function dragItEvent(event:MouseEvent):void 
+        { 
+           nameDragBet =event.currentTarget.selectedItem.name; 
+           nameTeamsBet =event.currentTarget.selectedItem.teamHasId;  
+        }
+        
+        public function dragItBet(event):void 
+        {  
+           nameDragBet =event.currentTarget.selectedItem.name; 
+           nameTeamsBet = event.currentTarget.selectedItem.idTeams;
+        }
+        
+		
+	 public function oneTeamChange():void
+	  {
+	  	 oneTeamSelect.enabled= oneTeamCheckB.selected;
+	   	  for(var i:uint=0;i<_betRepeater.length;i++)
+ 	  	  {
+ 	  			 _betRepeater.getItemAt(i)["winner"]=null;
+ 	  			_betRepeater.getItemAt(i)["teamId"]=null;
+ 	  	  }
+	      myrepBet.dataProvider=_betRepeater ;
+	      oneTeamSelect.text="";
+	  }
+	  
+	     public  function dragDropHandlerBetName(event:DragEvent):void 
+         {  
+          	 
+           if(event.currentTarget.id=="nameBType")
+          	{
+          		      _betRepeater.getItemAt(event.currentTarget.instanceIndices)["oddname"]=nameDragBet ;
+            		 _betRepeater.getItemAt(event.currentTarget.instanceIndices)["teamId"]=nameTeamsBet ;
+            		    myrepBet.dataProvider=_betRepeater ;
+            }
+            else if(event.currentTarget.id=="oddBWinner")
+            {
+          		 if(! oneTeamCheckB.selected)
+          		 {
+            		 _betRepeater.getItemAt(event.currentTarget.instanceIndices)["winner"]=nameDragBet ;
+            		 _betRepeater.getItemAt(event.currentTarget.instanceIndices)["teamId"]=nameTeamsBet ;
+              
+                 }
+                 else
+                 {
+                 	Alert.show("You set that this bet can have only one team, Please insert this them in ")
+                 }
+                    myrepBet.dataProvider=_betRepeater ;
+            } 
+            else if(event.currentTarget.id=="oneTeamSelect")
+            {
+                oneTeamSelect.text=nameDragBet;
+	          for(var i:uint=0;i<_betRepeater.length;i++)
+	 	  	  {
+	 	  			  _betRepeater.getItemAt(i)["winner"]=nameDragBet  ;
+            		 _betRepeater.getItemAt(i)["teamId"]=nameTeamsBet ;
+	 	  	  }
+	  	   	   myrepBet.dataProvider=_betRepeater ;
+            }
+            else if(event.currentTarget.id=="nameBTypeEvent")
+            {
+                 serviceBets.betsId=myRepTeamBet.getItemAt(event.currentTarget.instanceIndices)['teamHasId'];
+				serviceBets.newTeamId=nameTeamsBet;
+     			serviceBets.callUpdateBetEventTeam(resultAddNewTeam); 
+            }
+          	 
+         } 
+		
+		public function visiTeam(data:String):Boolean
+		{
+			var bol:Boolean;
+			 	 
+			 	 if(!oneTeamCheckB.selected)
+          		 {
+            			if(data==null)
+						{
+							bol = false;
+						}
+						else
+						{
+							bol = true;
+						}   
+                 } 
+            return bol;
+		}
+		
+		public function callDeleteTeam(i:uint):void
+		{
+			 _betRepeater.getItemAt(i)["teamId"]=null;
+			  _betRepeater.getItemAt(i)["winner"]=null;
+			   myrepBet.dataProvider=_betRepeater ;
+		}
+		
+	 public function dragDropHandlerHBoxTeamBet(event:DragEvent):void
+     { 
+        _betRepeater.addItem({"oddname":nameDragBet ,"odd":"0","winner":nameDragBet ,"teamId":nameTeamsBet })
+         myrepBet.dataProvider= _betRepeater;
+     }
+      
+    
+      
+      public function updateName():void
+      {
+      	  serviceBets.updateData=betName.text;
+     	  serviceBets.columnSelect="name";
+     	  serviceBets.groupIdEdited=eventIdTeams;
+     	  serviceBets.callUpdateBet(betTypeResultName)
+      }
+ 	
+  		public function selectedIndexCB(event):void
+        {
+     	    comboTrackerIfUpdateFail=event.currentTarget.selectedIndex;
+        }
+     		
+
+      
+      		public function changeTypeBet(event):void
+     		{
+     		
+     		   serviceBets.updateData=betTypeCB.selectedItem.eventId;
+     		   serviceBets.columnSelect="event";
+     		   serviceBets.groupIdEdited=eventIdTeams;
+     		   serviceBets.callUpdateBet(betTypeResultData)
+     	 	}
+     		 
+ 	  	 
+      public function betTypeResultData(event):void
+      { 
+     	 // oneTeamSelect.text="";
+     	if(_checkData.validation(event.result))
+      	{ 
+     		  _betRepeater=new ArrayCollection(event.result as Array); 
+     	 }
+     	 else
+     	 {
+     	 	  betTypeCB.selectedIndex=  comboTrackerIfUpdateFail
+     	 }
+     	 	 event.currentTarget.removeEventListener("result",betTypeResultData); 
+      }
+
+      public function betTypeResultName(event:ResultEvent):void
+     {
+      	if(_checkData.validation(event.result))
+      	{ 
+     		  nameBet=event.result[0][0] 
+     	 }
+     	 	 event.currentTarget.removeEventListener("result",betTypeResultName); 
+    }
+     			 
+     public function saveButton():void
+     {
+     	 var noviArray:Array=new Array(); 
+ 	  		
+ 	  		for(var i:uint=0;i<_betRepeater.length;i++)
+ 	  		{
+ 	  			if(_betRepeater.getItemAt(i)["oddname"].length==0)
+ 	  			{
+ 	  				Alert.show("Instance name must have 1-100 char")
+ 	  				 return
+ 	  			} 
+ 	  			
+ 	  			
+ 	  			for(var ie:uint=0;ie<noviArray.length;ie++)
+ 	  			{
+ 	  
+		 	  		 if(_betRepeater.getItemAt(i)["oddname"]==noviArray[ie][0])
+		 	  		 {
+		 	  		 	Alert.show("Bet instance must have uniqe names")
+ 	  				    return
+		 	  		 }
+ 	  			 }
+ 	  		 
+ 	  			noviArray.push([_betRepeater.getItemAt(i)["oddname"],_betRepeater.getItemAt(i)["odd"],_betRepeater.getItemAt(i)["teamId"],_betRepeater.getItemAt(i)["oddid"],_betRepeater.getItemAt(i)["betTypeId"]]) ;  
+ 	  		}
+ 	  		
+   
+ 	  	    serviceBets.arrayOfBets=noviArray; 
+ 	  	    serviceBets.callEditOddsService(resultUpdateOdds);
+     }       
+     
+	public function changeOddsBetType(text,data):void
+	{
+		_betRepeater.getItemAt(data)['odd']=text;
+	}     
+     
+     public function resultUpdateOdds(event):void
+     { 
+     	if(_checkData.validation(event.result))
+      	{ 
+     	  
+       }
+       else
+       {
+       	         	_betRepeater=_betRepeater;
+       }
+        event.currentTarget.removeEventListener("result",resultUpdateOdds); 
+     }
+     
+     
+     
+     
+     public function addTeamEvent( idTeams:uint):void
+     {
+         serviceBets.newTeamId=idTeams;
+     	 serviceBets.betsId=betId;
+     	 serviceBets.callAddNewTeamToEventService(resultAddNewTeam);
+     }
+     
+     public function resultAddNewTeam(event:ResultEvent):void
+     {   
+       if(_checkData.validation(event.result))
+      	{ 
+     	   myRepTeamBet=new ArrayCollection(event.result as Array);
+        } 
+        
+         event.currentTarget.removeEventListener("result",resultAddNewTeam); 
+     }
+     
+  
+     
+     public function callDeleteTeamBet(id:uint):void
+     { 
+     	 serviceBets.newTeamId=myRepTeamBet.getItemAt(id)['teamHasId'];
+     	 serviceBets.callDeleteBetsTeamsService(resultAddNewTeam);
+     }
+		
+        ]]>
+    </mx:Script>
+
+  <mx:VBox width="100%"  height="100%" horizontalAlign="center"  verticalGap="0" horizontalGap="0">
+	 <mx:Button click="returnName()" label="Close" />
+ 
+ 
+	
+
+	
+   <mx:Canvas  width="100%"  height="100%" >
+		
+		 <mx:VBox  width="100%" height="100%" horizontalAlign="center">
+		
+		
+		<mx:HBox   width="100%" height="100%" >
+			
+		 
+ 
+
+			
+		  <mx:HBox width="70%" height="100%">
+			   <mx:Canvas width="100%" height="100%">
+ 		 				<mx:VBox width="100%" height="100%">
+		 		   
+		 		   		
+		 		   	<mx:Form  width="100%" > 
+		 		    
+		 		  <mx:FormItem  direction="horizontal"  label="Bet name:"  width="100%" >
+		 		   	  <mx:TextInput text="{nameBet}" id="betName" width="100%"   /> 
+		 		   	  <mx:Button id="updateButton" label="Update"     /> 
+		 		 </mx:FormItem>
+		 		  
+		 		  	 <mx:FormItem  direction="horizontal"  label="Event active:">
+	    			   <mx:Label id="dateActive"   text="{stringFormatActive}" />   
+	    		  
+	    		  </mx:FormItem>
+	    		
+	    			 <mx:FormItem direction="horizontal" label="Event end:">
+	    		 		  <mx:Label id="dateTimer"   text="{stringFormat}" />    
+	    			 </mx:FormItem> 
+		 		   	 
+		 			 
+		 			 <mx:FormItem  direction="horizontal"  label="Type of bet:">
+		 		   		    <mx:ComboBox open="selectedIndexCB(event)" id="betTypeCB" selectedIndex="{betTypeSelectedIndex}"  change="changeTypeBet(event)" labelField="name" dataProvider="{betTypesData}" />
+		 		   	  </mx:FormItem>
+		 			 
+		 			  <mx:FormItem  direction="horizontal"  label="One Team:" width="100%">
+ 							 	 <mx:CheckBox  change="oneTeamChange()"  id="oneTeamCheckB" label="Only one team bet" />
+							 	 <mx:TextInput id="oneTeamSelect" width="100%"
+							 	 	   dragEnter="dragEnterHandler(event);"
+									  dragDrop="dragDropHandlerBetName(event);"
+									  enabled="false" 
+							 	 	 />
+		 		   	  </mx:FormItem>
+			 	 	 
+	    		 	</mx:Form>
+		 		 
+
+		 	  <mx:VBox  width="100%" height="100%"       >
+				 <mx:Panel width="100%" height="100%"  title="If you change data, please click on save or data will not be saved">
+				 	 <mx:Button label="Save" click="saveButton()" />
+				  
+				 	<mx:Repeater    id="myrepBet" dataProvider="{_betRepeater}"  >
+						
+						 	<mx:HBox  width="100%"> 
+
+						 			<mx:TextInput  height="100%" id="nameBType" width="40%" change="changeNameBetType(nameBType[event.target.instanceIndices].text,event.target.instanceIndices)" text="{myrepBet.currentItem.oddname}"
+						 				   dragEnter="dragEnterHandler(event);"
+									        dragDrop="dragDropHandlerBetName(event);" 
+						 		    	  /> 
+						 		   
+						 		    <mx:TextInput height="100%" id="oddBType" width="10%" change="changeOddsBetType(oddBType[event.target.instanceIndices].text,event.target.instanceIndices)" text="{myrepBet.currentItem.odd}" />
+						 		    <mx:TextInput height="100%" id="oddBWinner" width="40%" 
+						 		    	    editable="false"
+						 		    	    dragEnter="dragEnterHandler(event);"
+									        dragDrop="dragDropHandlerBetName(event);" 
+						 		    	 	text="{myrepBet.currentItem.winner}"  
+						 		    	   /> 
+						 		     <mx:Image buttonMode="true" includeInLayout="{visiTeam(myrepBet.currentItem.teamId)}" visible="{visiTeam(myrepBet.currentItem.teamId)}" click="callDeleteTeam(event.currentTarget.instanceIndices)" width="16" height="16" source="Delete.png" />	
+						 	</mx:HBox>
+					 
+				 	</mx:Repeater>
+				 	
+		 	  	 	</mx:Panel>
+		
+		      </mx:VBox>  	  	   
+					  
+		 		   	  
+		 		   	</mx:VBox>
+ 		   	
+ 		   </mx:Canvas>
+ 	
+ 		
+			    </mx:HBox> 
+			    <mx:VBox width="30%"  height="100%">
+			   
+			   		 <malt:BetsDataGrid    height="100%"  dragEnabled="true"  id="teamsTableData"   dragStart="dragItEvent(event)" dragProxyImage="malt.components.controls.DragProxy"     wordWrap="true" editable="true" variableRowHeight="true" width="100%"  >
+						   <malt:columns> 
+						    	 <mx:DataGridColumn    headerText="Bet teams" dataField="name" editable="false" />   
+						  </malt:columns> 
+		   		   </malt:BetsDataGrid>
+			    
+			   	 </mx:VBox>
+			   	 
+		</mx:HBox>
+   </mx:VBox>
+		
+		 
+		
+	</mx:Canvas>
+	
+ 
+	
+ 
+
+  
+		   </mx:VBox>
+
+</mx:TitleWindow>  

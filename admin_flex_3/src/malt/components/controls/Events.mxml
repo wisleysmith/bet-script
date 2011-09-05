@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<malt:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 
+   
+    	<mx:StringValidator  
+		    source="{eventName}" property="text" 
+		    minLength="1" maxLength="100"
+			trigger="{saveBetType}" triggerEvent="click" 
+			valid="call.saveEventData()"
+		 />
+    
+ 
+ 
+ <mx:HBox  width="100%" height="100%"  verticalGap="0" horizontalGap="0">
+ <mx:VBox  width="70%" height="100%">
+ <mx:ComboBox id="eventSportCombo" change="call.loadEvents(event)" prompt="Please select:"  labelField="name" />
+	 <mx:DataGrid width="100%" editable="true" itemEditEnd="call.betTypeTableEditEnd()" id="mainDG" itemClick="call.dataGridClickEvent(event)" height="100%"  >
+	  <mx:columns>
+	  	<mx:DataGridColumn headerText="Bet types data:" dataField="name" editable="false">
+			
+			 <mx:itemRenderer>
+			 	<mx:Component>
+				    <mx:HBox>
+				    	<mx:StringValidator  
+							 source="{betTypeUpdateTI}" property="text" 
+							 minLength="1" maxLength="100"
+							 trigger="{betTypeUpdate}" triggerEvent="click" 
+							 valid="outerDocument.call.updateBetType(betTypeUpdateTI.text,data.eventId)"
+								        />
+				    	 
+				    	  <mx:TextInput id="betTypeUpdateTI" text="{data.name}" width="100%" />
+				    	  <mx:Button id="betTypeUpdate"   paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"    label="Update" />
+				 	 </mx:HBox>
+				 </mx:Component>
+			 </mx:itemRenderer>
+				    		
+		 
+				    		
+		 </mx:DataGridColumn>
+	  
+	  	
+	    <mx:DataGridColumn width="60" headerText="Edit" editable="false" >
+		   <mx:itemRenderer>
+			   <mx:Component>
+				   <mx:Button label="Edit"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"   />
+			   </mx:Component>
+			</mx:itemRenderer>
+		</mx:DataGridColumn>
+	
+		<mx:DataGridColumn width="60" headerText="Delete" editable="false">
+	  		<mx:itemRenderer>
+	  			<mx:Component>
+	  					  		<mx:Button  click="outerDocument.call.deleteEvent(data.eventId)"  label="Delete" color="red" paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  />
+	  			</mx:Component>
+	  		</mx:itemRenderer>
+	  	</mx:DataGridColumn>
+	  	
+	  </mx:columns>
+	 </mx:DataGrid>  
+    
+ 	
+ </mx:VBox>
+  
+    <mx:TabNavigator width="50%"  height="100%"  id="mainTab">
+    	<mx:Canvas width="50%"  height="100%"  label="Add new" >
+    		 <mx:VBox width="100%"  height="100%" >
+	    		  <mx:Form>
+		    		  <mx:FormItem label="Add new bet type">
+		    		  	  <mx:TextInput id="eventName" change="call.addNewEvent()" /> 
+		    		 </mx:FormItem>
+	    		    
+	    		    <mx:FormItem label="Number of instances:" direction="horizontal">
+	    			       <mx:TextInput id="eventType" /><mx:Button label="Add" click="call.addNewData()" id="addNewEventType" />
+	    		    </mx:FormItem>
+	    		     
+	    	 		<mx:FormItem >
+	    		  		  <mx:Button label="Save"  id="saveBetType"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"   />
+	    		   </mx:FormItem>
+	    	 
+	    		    <mx:FormItem label="Bet type instance name:">
+	    		  		<mx:Label id="eventHeader" />
+	    		    </mx:FormItem>
+	    		    
+	    		  
+	    		  	
+	    		  </mx:Form>
+	    		  <mx:Repeater width="100%" height="100%" id="myrep"  > 
+				         <mx:HBox>
+				        	 <mx:TextInput  change="call.changeEventData(event,event.target.instanceIndices)"  text="{myrep.currentItem.name}"/> 
+				       	  	  <mx:Image buttonMode="true" click="call.removeFromCreateEvent(event.currentTarget.instanceIndices)" width="16" height="16" source="Delete.png" />	
+				       	  </mx:HBox>
+				  </mx:Repeater> 
+    		 </mx:VBox>
+    	</mx:Canvas>
+    	 
+    	<mx:Canvas width="50%"  height="100%"  label="Edit" >
+    		    <mx:VBox width="100%">
+	    		  	 <mx:Label id="editing" />  
+	    		  	 <mx:HBox width="100%">
+	    			 	 <mx:Label text="Add new instance" />	<mx:TextInput id="eventTypeUpdate" /><mx:Button label="Add" click="call.addNewDataUpdate()" />
+	    		     </mx:HBox>
+    		  
+			    		  <mx:Repeater id="myrep2" creationComplete="call.setRep2ToComplete()"  > 
+						    <mx:HBox width="100%">
+						      	 <mx:TextInput id="myText2" text="{myrep2.currentItem.name}"/> 
+						     	 <mx:Button label="Update" click="call.updateInstance(event.target.instanceIndices,myText2[event.target.instanceIndices].text)"  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"   />
+						     	 <mx:Image buttonMode="true" click="call.deleteEventType(event.currentTarget.instanceIndices)" width="16" height="16" source="Delete.png" />	
+						      </mx:HBox>
+						  </mx:Repeater>
+			     </mx:VBox>
+			  
+    	</mx:Canvas>
+    	
+    </mx:TabNavigator>
+ 
+  
+ 
+ </mx:HBox>
+ 
+</malt:MaltContainer>

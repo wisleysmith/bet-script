@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer   xmlns:malt="malt.components.controls.*" xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this);"   xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+<mx:Script>
+ 	<![CDATA[
+ 	 
+ 		 import mx.collections.ArrayCollection;
+ 		 import mx.events.MenuEvent 
+		
+   
+		   [Bindable]
+		  public var  dataBetButton =true;
+		  
+		  [Bindable]
+		  public var editBetButton =true;
+	      
+		  [Bindable]
+		  public var saveResultButton =false;  
+		  
+		  [Bindable]
+		  public var editRep=false;
+		  
+		  public function manpulateNumberOfEvents(data):String
+		  {
+		  	if(data==null)
+		  	{
+		  		return "0"
+		  	}
+		  	else
+		  	{
+		  		return data
+		  	}
+		  	
+		  }
+		 
+		     public function formatData(object:*):String
+		   {
+		   	if(object.name.length>25)
+		   	{ 
+		   	 var data=object.name;
+		 	 data=data.substring(0,25); 
+		     return data+"..."; 
+		   	}
+		   	else
+		   	{
+		   		return object.name
+		   	}
+		   	
+		   }
+ 	]]>
+ </mx:Script>
+
+   <mx:Style>
+   	.yourLinkButton
+{
+    upSkin:ClassReference("mx.skins.ProgrammaticSkin");
+    overSkin:ClassReference("mx.skins.ProgrammaticSkin");    
+    downSkin:ClassReference("mx.skins.ProgrammaticSkin");    
+    disabledSkin:ClassReference("mx.skins.ProgrammaticSkin");
+}
+   </mx:Style>
+
+  <mx:HBox width="100%" height="100%" id="box" verticalGap="0" horizontalGap="0"> 
+	<mx:VBox>
+	  
+	 <code:VerticalMenuBar   width="20%" height="100%"   itemClick="call.selectBet(event)" labelFunction="formatData"	 id="sportsAndGroupsVMC" />
+	 </mx:VBox>
+	   <mx:VBox width="100%" height="100%" >
+		  	 <mx:HBox  width="100%" >
+			  	 
+			  	
+			  	    <mx:Panel title="Filter:" id="filterPanel" width="100%"  >
+				  	 	<mx:HBox width="100%">
+				  	 
+	 
+			
+				  	   <mx:CheckBox label="Bet Types:" id="filterCBEvent" change="call.filterCBEvent(event)" selected="false" />
+					   <mx:Canvas id="filerEventHBox" enabled="false" >
+					   		<mx:ComboBox labelField="name" id="eventCB" change="call.changeTypeData()" />
+					   </mx:Canvas> 
+				        <mx:Label text="Month:" />
+				         <mx:ComboBox id="monthCB" creationComplete="call.setDateToCB(event)" >
+				         <mx:String>1</mx:String>
+				           <mx:String>2</mx:String>
+				             <mx:String>3</mx:String>
+				               <mx:String>4</mx:String>
+				                 <mx:String>5</mx:String>
+				                   <mx:String>6</mx:String>
+				                     <mx:String>7</mx:String>
+				                       <mx:String>8</mx:String>
+				                         <mx:String>9</mx:String>
+				                           <mx:String>10</mx:String>
+				                             <mx:String>11</mx:String>
+				                               <mx:String>12</mx:String>
+				         </mx:ComboBox>
+				          <mx:ComboBox id="yearCB" creationComplete="call.setYearToCB(event)" >
+				         	    <mx:String>2009</mx:String>
+				      		     <mx:String>2010</mx:String>
+				          		   <mx:String>2011</mx:String>
+				            	 
+				          </mx:ComboBox>
+		              </mx:HBox>
+					  </mx:Panel> 
+			
+		   	 </mx:HBox>
+		   <mx:Panel  id="mainBetPanel" width="100%" height="100%">
+	  
+	   	<mx:HBox width="100%">
+	 
+	   	</mx:HBox>
+		<mx:DataGrid  id="rep" width="100%" height="100%" variableRowHeight="true" wordWrap="true" > 
+		   		<mx:columns>
+		   		    <mx:DataGridColumn  headerText="Bet name" dataField="nameBet" />
+		   			<mx:DataGridColumn  headerText="Bet type" dataField="eventname" />
+		   		    <mx:DataGridColumn  headerText="End" dataField="dateinfo" />
+		   		    <mx:DataGridColumn   headerText="Odds"  >
+		   		    <mx:itemRenderer>
+		   		    	<mx:Component>
+		   		    <mx:Tile  direction="horizontal">
+		   		    			<mx:Repeater id="reps" dataProvider="{data.databets}">
+			   		    		      <mx:Label text="|{reps.currentItem.oddname +'-'+reps.currentItem.odd}|"  /> 
+			 		  			 </mx:Repeater> 
+		   		    </mx:Tile>
+		   		    	</mx:Component>
+		   		    </mx:itemRenderer>
+		   		    </mx:DataGridColumn>
+		   		   	 	<mx:DataGridColumn width="50">
+		   		   	 		<mx:itemRenderer>
+		   		   	 			<mx:Component>
+		   		   	 					<mx:LinkButton   paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.callAddBet(data.betId)}"   label="+{outerDocument.manpulateNumberOfEvents(data.count)}" />
+		   		   	 			</mx:Component>
+		   		   	 		</mx:itemRenderer>
+		   		   	 	</mx:DataGridColumn>
+		   		   	 	
+		   		   	 	 
+		   		   	 	<mx:DataGridColumn width="50">
+		   		   	 		<mx:itemRenderer>
+		   		   	 			<mx:Component>
+		   		   	 					<mx:LinkButton  paddingBottom="0" paddingLeft="0" paddingRight="0" paddingTop="0"  click="{outerDocument.call.showWindow(data.eventBet,data.betId,data.groupId)}"  label="Edit" />
+		   		   	 			</mx:Component>
+		   		   	 		</mx:itemRenderer>
+		   		   	 	</mx:DataGridColumn>
+		   		   	 	 
+		   		</mx:columns>
+		   	</mx:DataGrid>   	 		 
+	 
+		    
+	     </mx:Panel>
+		  	
+		  	 
+	  	 </mx:VBox>
+  </mx:HBox>
+	 
+ 
+ 
+</maltC:MaltContainer>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<malt:ServiceHolder       xmlns:malt="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+
+ 
+   <mx:RemoteObject 
+		id="BetsID" 
+		destination="zend" 
+		source="Bets" 
+		 showBusyCursor="true"
+		> 
+		<mx:method name="insertBets"    />
+        <mx:method name="insertBetType"    />
+        <mx:method name="updateBetType"    /> 
+	    <mx:method name="deleteBetsType"    />
+	    <mx:method name="updateBets"    />
+	    <mx:method name="selectSportBetsRows"      />
+		<mx:method name="selectSportBetsData"      />
+		<mx:method name="selectSportBetsDataFinished"      /> 
+		<mx:method name="deleteBet"      />
+		<mx:method name="selectSportBetsDataArhive"      />
+		<mx:method name="selectBetEdit"      />
+		<mx:method name="setDataForBet"      />
+		<mx:method name="setBetBasicService"      />
+		<mx:method name="insertBetEvent"      /> 
+		<mx:method name="selectBetEventTeam"      /> 
+		<mx:method name="selectEventBetsService"      /> 
+		<mx:method name="editOddsService"      /> 
+	    <mx:method name="editEventService"      /> 
+	    <mx:method name="addNewTeamToEventService"      /> 
+	    <mx:method name="updateBetEventTeam"      /> 
+	    <mx:method name="deleteBetsTeamsService"      />   
+        <mx:method name="updateBetsMain"      />    
+		 
+	</mx:RemoteObject>
+	
+    
+
+
+</malt:ServiceHolder>

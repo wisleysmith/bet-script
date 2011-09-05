@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Simple custom MXML TitleWindow component.
+     The TitleWindowApp application displays this component. 
+     You cannot run it independently. -->
+     
+<mx:TitleWindow   xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"
+     >
+
+    <mx:Script>
+        <![CDATA[
+        	import mx.collections.ArrayCollection;
+        	import mx.rpc.events.ResultEvent;
+           import malt.components.service.BetsAction;
+           import mx.managers.PopUpManager;
+           import mx.controls.Alert;
+           	import malt.components.classes.CheckData;
+           private var userId:uint;
+           private var _service:BetsAction;
+               private var _checkData:CheckData;
+               private var system:String;
+               private var win:Number;
+               private var winner:Number;
+        	 
+     		public function  dataAC(data ):void
+     		{ 
+     		   _service=new BetsAction();
+	           _checkData=CheckData.getInstance(); 		
+     		    userId=data;
+     		    // sets the invoice date to today's date
+				var invoiceDate:Date = new Date();
+				var millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+				// adds 30 days to get the due date
+				var dueDate:Date = new Date(invoiceDate.getTime() - (1 * millisecondsPerDay));
+		        first.dateField.selectedDate= dueDate;
+		        
+		        var invoiceDate:Date = new Date();
+				var millisecondsPerDay:int = 1000 * 60 * 60 * 24;
+				// adds 30 days to get the due date
+				var dueDate:Date = new Date(invoiceDate.getTime() + (1 * millisecondsPerDay));
+		        second.dateField.selectedDate= dueDate
+            }
+     		
+     				public function loadDetails(event):void
+			{
+			       system= event.currentTarget.selectedItem.system 
+			       win= event.currentTarget.selectedItem.fundsout
+			       winner= event.currentTarget.selectedItem.fundswin 
+				  _service.ticketId=event.currentTarget.selectedItem.ticketId
+				   _service.callSelectBetInfo(resultOneBet) 
+			}
+			
+			public function resultOneBet(event:ResultEvent):void
+			{
+				    if(_checkData.validation(event.result)) 
+			    	 {
+			    	 	  var login:OneBetInfo=OneBetInfo(PopUpManager.createPopUp( this, OneBetInfo , true));
+		                   login.width=this.width;
+               				login.height= this.height;  
+               		 
+		                 login.dataAC(event.result as Array, system,win,winner);  
+			    	 }
+			    	 else
+			    	 {
+			    	 	Alert.show("Problems on server, please try later.")
+			    	 }  
+	    	   	  	    event.currentTarget.removeEventListener("result",resultOneBet);
+			}
+     		
+     		 public function cancel():void
+ 	  		 {
+     		 	PopUpManager.removePopUp(this);
+     		 }
+			
+			public function load():void
+			{
+		 	       if(second.dateField.selectedDate <   first.dateField.selectedDate )
+		 	  		{
+		 	  			var text:String="Active date cant be higher or equal to End date.\nWhen bet becomes active then players can place bet so you can only change odds for that bet\n"
+		 	  			Alert.show(text)
+		 	  			return  void;
+		 	  		}  
+		 	  		else  if(second.dateField.selectedDate >   first.dateField.selectedDate )
+		 	  		{
+		 	  			
+		 	  		}
+		 	  		else
+		 	  		{ 
+				 	  		 if(second.hours <   first.hours)
+				 	  		{
+				 	  			var text:String="Active date  hours"
+				 	  			Alert.show(text)
+				 	  			return  void;
+				 	  		} 
+				 	  		else  if(second.hours ==  first.hours)
+				 	  		{
+				 	  			 if(second.min <=  first.min)
+				 	  			 {
+				 	  			 	var text:String="Active date  min"
+				 	  				Alert.show(text)
+				 	  				return  void;
+				 	  			 }
+				 	  		}
+				 	  			
+		 	  		}
+		 	
+		 	
+		 	
+		 		 _service.userEditId=userId ;
+		        
+		         _service.datefirst=first.formatedTime;
+		         _service.datesecond= second.formatedTime;
+		         
+		         _service.statusOfBet=String(test.selectedValue);
+		         _service.callSelectUserPlacedBets(resultData) ;
+	 	         
+			}
+			
+			public function resultData(event:ResultEvent)
+			{
+				 if(_checkData.validation(event.result))
+		    	  	{ 
+						var jok:Array=event.result as Array 
+						if (jok.lenght==0)
+						{ 
+							mainDG.dataProvider=new ArrayCollection();
+						}
+						else
+						{
+							
+							var first:Array  = jok[0] as Array  ;
+							var second:Array= jok[1] as Array ; 
+						    var data:ArrayCollection=new ArrayCollection();
+					 
+						  
+								for(var i:uint=0;i<first.length;i++)
+							    {	
+							        var groupsAC=new ArrayCollection();
+							        for(var ie:uint=0;ie<second.length;ie++)
+							   		{
+							   			if(second[ie][0]==first[i][0])
+							   			{ 
+							   	        	groupsAC.addItem({"ticketId":second[ie][0], "name":second[ie][1], "cor":second[ie][2], "odd":second[ie][3]});
+							   			}
+							   	 	}
+							   	     data.addItem({"ticketId":first[i][0], "created":first[i][1], "fundswin":first[i][2], "fundsout":first[i][3], "system":first[i][4],"children":groupsAC}); 
+							     } 
+								   
+							 	mainDG.dataProvider=data;
+							   event.currentTarget.removeEventListener("result",resultData);
+						}
+					}
+			}
+        ]]>
+    </mx:Script>
+
+     <mx:VBox width="100%"  height="100%" horizontalAlign="center"  verticalGap="0" horizontalGap="0">
+	   <mx:Button click="cancel()" label="Close" /> 
+
+	   <mx:RadioButtonGroup id="test" />
+	   
+	   <mx:HBox>
+	   		<mx:RadioButton selected="true" id="active" value="true" groupName="test" label="Active" />
+	   		<mx:RadioButton groupName="test" id="arhive" value="false" label="Arhive" /> 
+	    </mx:HBox>
+	    <mx:HBox>
+	 
+	   <mx:Label text="From:" /><malt:DateTimer   id="first" />
+	    <mx:Label text="  To:" /><malt:DateTimer   id="second" />
+	   </mx:HBox>
+	   <mx:Button label="Load" click="load()" />
+	   <mx:DataGrid itemClick="loadDetails(event)" id="mainDG"  width="100%" height="100%" variableRowHeight="true" wordWrap="true" >
+				   	<mx:columns> 
+				   		<mx:DataGridColumn headerText="Bet/Your selection/odds (click for details) "   dataField="name" >
+				   			<mx:itemRenderer>
+				   				<mx:Component>
+				   				<mx:VBox height="100%" width="100%">
+				   				
+				   					<mx:Repeater id="rep" dataProvider="{data.children}" >
+				   					 
+				   						<mx:Label   text="{rep.currentItem.name}  |  {rep.currentItem.cor}  |  {rep.currentItem.odd}" /> 
+				   						  
+				   				 
+				   					</mx:Repeater>
+				   			   </mx:VBox>
+				   				</mx:Component>
+				   				
+				   			</mx:itemRenderer>
+				   		</mx:DataGridColumn> 
+				   		<mx:DataGridColumn   width="50" headerText="System" dataField="system" />
+				   		<mx:DataGridColumn   width="150" headerText="Date" dataField="created" />
+				   		<mx:DataGridColumn  width="80"  headerText="Win"  dataField="fundswin"  />
+				   		<mx:DataGridColumn  width="80"  headerText="Played" dataField="fundsout"  />
+				   		
+				   	</mx:columns>
+				   </mx:DataGrid>
+  </mx:VBox>
+ 	 
+</mx:TitleWindow>  

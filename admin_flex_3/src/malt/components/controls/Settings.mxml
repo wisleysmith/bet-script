@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer  creationComplete="super.run(this);"   xmlns:malt="malt.components.controls.*"  xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+ 	
+ 	 	 <mx:VBox width="100%" height="100%"   horizontalAlign="left"  verticalGap="0" horizontalGap="0">
+ 	 	 	<mx:Form  >
+ 	 	 		<mx:FormItem label="Name:" width="100%" >
+ 	 	 			<mx:Label id="nameDB" />
+ 	 	 		</mx:FormItem>
+ 	 	 		
+ 	 	 		<mx:FormItem  label="Timezone:" width="100%" >
+ 	 	 			<mx:Label id="timezone" />
+ 	 	 		</mx:FormItem>
+ 	 	 		
+ 	 	 		<mx:FormItem direction="horizontal" label="Money that user recive at registration:" width="100%" >
+ 	 	 			 <mx:TextInput id="funds"  /> <mx:Button label="Update" click="call.updateFunds()" />
+ 	 	 		</mx:FormItem>
+ 	 	 		
+ 	 	 		<mx:FormItem width="100%" label="Allow user to register, if set to no user can only be added by admin:" >
+ 	 	 		   <mx:ComboBox change="call.changeStatus()" id="register">
+ 	 	 		   	<mx:String>No</mx:String>
+ 	 	 		   	 	<mx:String>Yes</mx:String>
+ 	 	 		   </mx:ComboBox>
+ 	 	 		</mx:FormItem>
+ 	 	 	</mx:Form>
+ 	 	 </mx:VBox>
+ 
+</maltC:MaltContainer>
