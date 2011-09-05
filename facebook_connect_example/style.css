@@ -1,0 +1,48 @@
+@charset "utf-8";
+body { margin:0; padding:0; background: none; width:100%; background:#fafbfb url(images/bg.gif) top repeat-x;}
+html { padding:0; margin:0;}
+.clr {clear:both;}
+
+ 
+/* menu */
+.menu { width:593px; margin:0px 0 0 0; padding:0; float:left; height:30px;}
+.menu ul { margin:0; padding:0; list-style:none;}
+.menu li { margin:0; padding:0;  font:bold 12px Arial, Helvetica, sans-serif; color:#a6a6a6; float:left;}
+.menu a { float:left; font:bold 12px Arial, Helvetica, sans-serif; color:#fff; padding:11px 16px; margin:0; text-decoration:none;}
+.menu a:hover {color:#252525; background: url(images/hover.gif) top repeat-x; padding:10px 15px;border:1px solid #fff;}
+.menu a.active {color:#252525; background:url(images/hover.gif) top repeat-x; padding:10px 15px; border:1px solid #fff;}
+/* rss */
+ 
+ 
+table.overall {
+	border: 6px inset #8B8378;
+	-moz-border-radius: 6px;
+}
+table.overall td {
+	border: 1px solid black;
+	padding: 0.2em 2ex 0.2em 2ex;
+	color: black;
+}
+table.overall tr.d0 td {
+	background-color: #FCF6CF;
+}
+table.overall tr.d1 td {
+	background-color: #FEFEF2;
+}
+ 
+
+  
+
+#topTicketWeek
+{
+width:50%;
+float:left; 
+ 
+
+}
+#topPlayersOverall
+{
+width:50%;
+float:left; 
+  
+}
