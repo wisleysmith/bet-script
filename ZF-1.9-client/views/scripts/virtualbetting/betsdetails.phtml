@@ -1,0 +1,54 @@
+<p>
+<?php 
+
+	$sportSort=array();		
+	if(!is_array($this->formatResult))
+	{
+		return;	
+	}			            
+	foreach($this->formatResult as $e)
+	{
+		foreach($e as $eInner)
+		{
+			$sportSort[$eInner['eventbetId']][]=$eInner;
+		} 
+	} 
+	?>  
+	
+	<table ALIGN="left" border="1">
+	<tr>
+	<td class="topTD">Event</td>
+	<td class="topTD" >Završava</td>
+	<?php 
+		$repeat=0; 
+		foreach($sportSort as $f)
+		{
+			$f=array_reverse($f);
+			 for($i=0;$i<sizeof($f)-1;$i++) 
+			 {
+			 	echo '<td class="topTD" >'.$f[$i]['oddname'].'</td>';
+			 }   
+		   	break;  
+		} 
+	?> 
+	</tr>
+	<?php
+	  
+	foreach($sportSort as $e)
+	{  
+		  
+		echo '<tr class="betRow">';
+		echo '<td  class="betName">'.$e[0]['name'].'</td>';
+		echo "<td>".$e[0]['dateinfo']."</td>";
+		$e=array_reverse($e);
+		for($i=0;$i<sizeof($e)-1;$i++) 
+		{   
+		 	echo '<td><a href="javascript:void(0)" betid="'.$e[sizeof($e)-1]['betId'].'" value="'.$e[$i]['oddname'].'" linkid="'.$e[$i]['betTypeId'].'" >'.$e[$i]['odd'].'</td>';
+		}  
+		echo "</tr>"; 
+	} 
+	
+	?>
+	</table> 
+	
+</p>

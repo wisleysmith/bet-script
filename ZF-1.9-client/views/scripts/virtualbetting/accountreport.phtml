@@ -1,0 +1,36 @@
+<div id="content" class="clearfix"> 
+<?php 
+if(is_array($this->account))
+{ 
+?>
+<table>
+ 
+ <tr>
+ 	<td   class="topTD"  width="100" >Vrijednost</td>
+ 	<td  class="topTD" width="300" >Tip</td>
+ 	<td  class="topTD" width="300" >Vrijeme</td>
+ </tr>
+	<?php 
+		foreach($this->account as $a)
+		{
+			?>
+			 <tr>
+			 	<td><?php echo $a['funds']; ?></td>
+			 	<td><?php if((int)$a['ticket']==1){echo "Listić";}else{echo "Admin";} ?></td>
+			 	<td><?php echo $a['date']; ?></td>
+			 </tr> 
+			<?php 
+		}
+	?>
+	
+</table>
+</div>
+
+<?php 	
+}
+else
+{
+	echo "Nema razultata za traženo razdoblje";
+}	
+ 
+?>

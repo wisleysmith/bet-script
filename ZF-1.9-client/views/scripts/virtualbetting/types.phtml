@@ -1,0 +1,23 @@
+<?php 
+/**
+ * @copyright   Copyright (c) 2009 Oxidian d.o.o (http://www.oxidian.hr)
+ * @license     http://www.opensource.org/licenses/GPL-2.0 GPL 2.0
+ * @author      Goran Samboliæ 
+ */
+?>
+<p>
+<?php 
+					            		
+	$sportSort=array();		
+	if(!is_array($this->formatResult))
+	{
+		echo "Nema ponude";
+		return;	
+	}		
+ 
+	foreach($this->formatResult as $e)
+	{  
+	 	echo '<span style="padding-right:20px"><a linkid="'.$e['eventId'].'" href="javascript:void(0)">'.$e['name'].'('.$e['num'].')</a></span> ';
+	} 
+	?>  
+</p> 

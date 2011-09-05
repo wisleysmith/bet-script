@@ -1,0 +1,54 @@
+<p>
+<?php 
+
+	$sportSort=array();		
+	if(!is_array($this->formatResult))
+	{
+		echo "Nema ponude";
+		return;	
+	}			            
+	foreach($this->formatResult as $e)
+	{
+		foreach($e as $eInner)
+		{
+			$sportSort[$eInner['eventbetId']][]=$eInner;
+		} 
+	} 
+	?>  
+	
+	<table border="1">
+	<tr>
+	<td>Event</td> 
+	<?php 
+		$repeat=0; 
+		foreach($sportSort as $f)
+		{
+			$f=array_reverse($f);
+			 for($i=0;$i<sizeof($f)-1;$i++) 
+			 {
+			 	echo "<td>".$f[$i]['oddname']."</td>";
+			 }   
+		   	break;  
+		} 
+	?> 
+	</tr>
+	<?php
+	  
+	foreach($sportSort as $e)
+	{  
+		  
+		echo '<tr class="betRow">';
+		echo '<td class="betName">'.$e[0]['name'].'</td>'; 
+		$e=array_reverse($e);
+		for($i=0;$i<sizeof($e)-1;$i++) 
+		{   
+		 	echo '<td>'.$e[$i]['odd'].'</td>';
+		}  
+		echo "</tr>"; 
+	} 
+	
+	?>
+	</table> 
+	
+</p>
+ 
