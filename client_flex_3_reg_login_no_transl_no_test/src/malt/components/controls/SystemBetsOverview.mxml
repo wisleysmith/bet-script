@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?> 
+     
+<mx:TitleWindow   xmlns:code="http://code.google.com/p/flexlib/"  xmlns:mx="http://www.adobe.com/2006/mxml"  width="100%" height="100%"  xmlns:malt="malt.components.controls.*"     >
+
+      <mx:Script>
+      	<![CDATA[
+      	
+      	    import mx.managers.PopUpManager;
+      	    import mx.collections.ArrayCollection;
+      		public function dataAC(dataParam:ArrayCollection)
+      		{
+      		   
+      		   data.dataProvider=dataParam	; 
+      		}
+      		
+      	    public function cancel():void
+ 	  		{
+     		 PopUpManager.removePopUp(this); 
+     		}
+      		
+      		public function test():void
+      		{
+      			
+      		}
+      	]]>
+      </mx:Script>
+      <mx:VBox width="100%" height="100%">
+      	  <mx:Button click="cancel()" label="Zatvori" />  
+        <mx:DataGrid id="data"  width="100%" height="100%" variableRowHeight="true" wordWrap="true" >
+        <mx:columns>
+        	<mx:DataGridColumn headerText="Sistem" dataField="system"  width="80" />
+        	<mx:DataGridColumn  headerText="Događaj / Izbor / Koeficijent" dataField="name" >
+				 <mx:itemRenderer>
+				   	 <mx:Component>
+				   		 <mx:VBox height="100%" width="100%">
+				   			 <mx:Repeater  height="100%"  id="rep" dataProvider="{data.children}" >
+				   				 <mx:HBox  height="100%"  width="100%">
+				   					 <mx:Label text="{rep.currentItem.name}  / {rep.currentItem.oddname }  / {rep.currentItem.odddec }" paddingTop="0" paddingBottom="0"  />  
+				   				 </mx:HBox>
+				   			 </mx:Repeater>
+				   		 </mx:VBox>
+				     </mx:Component> 
+				 </mx:itemRenderer>
+		  </mx:DataGridColumn> 
+        	<mx:DataGridColumn headerText="Koeficijenti" width="80" dataField="oddCounter" />  
+        	<mx:DataGridColumn width="80" headerText="Dobitak"  dataField="win"  />
+        </mx:columns>
+        </mx:DataGrid>
+       </mx:VBox>
+</mx:TitleWindow>  

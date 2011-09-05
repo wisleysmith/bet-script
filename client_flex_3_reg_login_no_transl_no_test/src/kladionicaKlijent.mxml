@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mx:Application preinitialize="t()"  xmlns:malt="malt.components.controls.*" xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute" xmlns:code="http://code.google.com/p/flexlib/">
+	
+	   
+	<mx:RemoteObject 
+		id="LoginID" 
+		destination="zend" 
+		source="Login" 
+		>  
+		
+		<mx:method name="Login" result="resultLogin(event)"    />
+          
+		 
+	</mx:RemoteObject>
+	
+		<mx:RemoteObject 
+		id="Players" 
+		destination="zend" 
+		source="Players" 
+		>  
+		
+		<mx:method name="Login" result="resultLogin(event)"    />
+          
+		 
+	</mx:RemoteObject>
+	
+   <mx:Style source="SimplicityGray/src/simplicitygray.css"/>
+
+ 
+<mx:Script>
+	<![CDATA[
+ 
+         import mx.rpc.events.ResultEvent;
+		import malt.Main
+		import malt.components.classes.CheckData;
+		import malt.components.service.BetsAction;
+		private var _checkData:CheckData; 
+		private var _service:BetsAction;
+		import mx.controls.Alert;  
+	 
+		
+		[Bindable]
+		private var appId:uint;
+		   
+		
+		private function t():void
+		{ 
+		 
+			_service=new BetsAction()
+		   var main = new Main();
+		  
+		   _checkData= CheckData.getInstance();
+		}
+		
+  
+ 
+		
+	  private function sendLogin():void
+	   { 
+	  
+	   	  LoginID.Login( appId,login.text,password.text);
+	   }
+	   
+	    private function resultLogin(event:ResultEvent):void
+	   {
+	   	 	 if(_checkData.validation(event.result))
+	   		{ 
+		   		     loginBox.includeInLayout=false;
+		   			 loginBox.visible=false;
+		   			 mainTab.visible=true
+		   			 mainTab.visible=true
+		   			 mainTab.call.sel=0
+		   	}
+		    else
+		    {
+		   			if(_checkData.status=="nouser")
+		   			{
+		   				Alert.show("Korisnik ne postoji");
+		   			} 
+	   		}
+	   		  
+	   } 
+	   
+    public function setLoginBox():void
+    {
+    	passRem.call.setLoginBox( loginBox, mainTab)
+    }
+ 
+	]]>
+</mx:Script>
+ 
+
+  <mx:VBox width="100%" height="100%" horizontalAlign="center" verticalGap="0" horizontalGap="0">
+  <mx:VBox  width="100%"  horizontalAlign="center"   >
+	   
+	  
+  		 <malt:MainTab   visible="false"  id="mainTab" ClassName="MainTab" />
+  		<mx:HBox id="loginBox"  >
+  
+  		 <mx:Label text="Korisničko ime"  />
+  		  <mx:TextInput id="login" />
+  		  <mx:Label text="Lozinka" />
+  		  <mx:TextInput id="password"  displayAsPassword="true"   /> 
+  		  <mx:Button id="send" click="sendLogin()" label="Login"   /> 
+  		 <mx:LinkButton  label="Zaboravili korisničko ime/lozinku?"  click="mainTab.call.sel=3;mainTab.mainTab.selectedIndex=-1"  />
+  	     <mx:LinkButton   label="Registracija" click="mainTab.call.sel=4;mainTab.mainTab.selectedIndex=-1"    />
+  		 
+  		 	</mx:HBox>
+  </mx:VBox>
+  		   <mx:HBox width="100%">
+  		   	<mx:Button label="Početna" click="{Bets.mainVS.selectedIndex=0;mainTab.call.sel=0;mainTab.mainTab.selectedIndex=-1}" />
+  		   </mx:HBox>
+  		<mx:ViewStack  id="viewStack"  selectedIndex="{mainTab.call.sel}" width="100%" height="100%" >
+  		<mx:Canvas  width="100%" height="100%" >
+    		<mx:HBox  width="100%" height="100%" >
+	    		<malt:Bets  id="Bets" ClassName="Bets"  width="90%" height="100%" />
+	    		 <mx:VBox width="10%" height="{this.height-100}" verticalScrollPolicy="on">
+	    		   <malt:BetSlip ClassName="BetSlip" width="100%" /> 
+	    		 </mx:VBox> 
+    	    </mx:HBox>
+    	 </mx:Canvas>
+    	 
+    	 <mx:Canvas  width="100%" height="100%" >
+  
+	  			 <malt:History width="100%" height="100%"  ClassName="History" />
+ 
+    	 </mx:Canvas>
+    	 
+    	 <mx:Canvas width="100%" height="100%" >
+    	 	<malt:MySettings width="100%" height="100%"  ClassName="MySettings" />
+    	 </mx:Canvas>
+    	 
+   
+    	<!-- register -->
+    	 <mx:Canvas  width="100%" height="100%" > 
+    	 <mx:VBox width="100%" height="100%" verticalAlign="top" horizontalAlign="center" > 
+		 	<malt:PasswordRemember creationComplete="setLoginBox()" id="passRem" width="100%" height="100%" ClassName="PasswordRemember" /> 
+    	 </mx:VBox>
+    	 </mx:Canvas>
+    	 
+     <!-- login    -->	 
+    	 <mx:Canvas  width="100%" height="100%" >
+  <mx:HBox width="100%" horizontalAlign="center">
+  	
+    <malt:Players ClassName="Players" width="100%" /> 
+ 
+  </mx:HBox>
+    	 </mx:Canvas>
+    	  
+       </mx:ViewStack>
+     	  
+    	     	
+  </mx:VBox>	 
+
+</mx:Application>

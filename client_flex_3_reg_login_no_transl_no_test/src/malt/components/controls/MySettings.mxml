@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<maltC:MaltContainer xmlns:code="http://code.google.com/p/flexlib/"  creationComplete=" super.run(this)"   xmlns:malt="malt.components.controls.*"  xmlns:maltC="malt.core.containers.*" xmlns:mx="http://www.adobe.com/2006/mxml"  >
+  
+  
+ 
+ 
+     
+    <mx:StringValidator  
+        	id="namedataValid"
+        	source="{namedata}" property="text" 
+            minLength="2" maxLength="50"
+ 
+    required="false" 
+        />
+        
+  	 	
+<mx:StringValidator  
+        	id="lastnameValid"
+        	source="{lastname}" property="text" 
+            minLength="2" maxLength="50"
+ 
+    required="false" 
+        />       
+ 
+ <mx:StringValidator  
+        	id="usernameValid"
+        	source="{username}" property="text" 
+            minLength="5" maxLength="20"
+    
+    required="false" 
+        />     
+ 	     
+ 	       
+      
+ 	     
+  <mx:EmailValidator 
+        	id="emailValid"
+        	source="{email}" property="text"  
+ 
+    required="false" 
+			  	
+        />     	     
+ 	
+ 	  <mx:StringValidator  
+        	id="passValid"
+        	source="{pass}" property="text" 
+            minLength="6" maxLength="20" 
+    required="false" 
+        />      	 
+ 	  	  
+ 	   <mx:StringValidator  
+        	id="retPassValid"
+        	source="{passRetype}" property="text" 
+            minLength="6" maxLength="20"
+           required="false"   
+ 
+        />      	 
+ 	  	  
+ 
+  <mx:VBox width="100%"  height="100%" horizontalAlign="center">
+ 	<mx:Form>
+ 	  			<mx:FormItem label="Ime:" direction="horizontal">
+ 	  				<mx:TextInput id="namedata" />
+ 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Klub ID:" direction="horizontal">
+ 	  				<mx:TextInput id="lastname" />
+ 	  		 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Korisničko ime:" direction="horizontal">
+ 	  				<mx:TextInput id="username" />
+ 	  			 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Email:" direction="horizontal">
+ 	  				<mx:TextInput id="email" />
+ 	  	 
+ 	  			</mx:FormItem>
+ 	  			<mx:FormItem label="Lozinka:" >
+ 	  				<mx:TextInput id="pass"  displayAsPassword="true" />
+ 	  			</mx:FormItem>
+ 	  		    <mx:FormItem label="Potvrdi lozinku:" direction="horizontal">
+ 	  				<mx:TextInput id="passRetype" displayAsPassword="true"  />
+ 	  			 
+ 	  			</mx:FormItem>
+ 	  	    	<mx:FormItem  direction="horizontal" > 
+ 	  				<mx:Button label="Izmjeni"  id="updateButton" click="call.update( )" />
+ 	  				<mx:Button label="Poništi" click="call.reset()"  />
+ 	  			 
+ 	  			</mx:FormItem>
+ 	  	 </mx:Form>
+  </mx:VBox>
+
+ 
+  
+  
+  
+</maltC:MaltContainer>
