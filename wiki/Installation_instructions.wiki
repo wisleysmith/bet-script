@@ -1,6 +1,6 @@
-#Installation instruction.
+#Installation instruction 1.0.
 
-= Installation instruction =
+= Installation instruction 1.0=
 In:
 library/Zend/dbcontrol/StoredProcedures.php
 Set up your database data.
