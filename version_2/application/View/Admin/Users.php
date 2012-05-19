@@ -40,7 +40,7 @@ class View_Admin_Users extends Core_View_Layout_Template
 		$userStatusCollection = new Core_Model_Adapter_ModelCollection();
 		$userStatusCollectionData = $userStatusCollection->getModelCollection($userStatusModel);
 		
-		$urlServiceBankBetFormatter = Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view')).'&view=View_Admin_UserBankBets&user_id={value}';
+		$urlServiceBankBetFormatter = Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view')).'&view=View_Admin_UserBankBets&user_id={value}';
 	 
 
 		$table->addColumn('{key:"user_status_id_FK",label:"Group",allowHTML:true,formatter:'.$table->getFormatter("selectFromModel",array('values'=>$userStatusCollectionData,'value'=>'user_status_id','label'=>'status_name','attributes'=>array('name'=>'model['.$this->usersTableWithPanel->getModelName().'][user_status_id_FK]'))).'}',false,'user_status');

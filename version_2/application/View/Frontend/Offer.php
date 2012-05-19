@@ -11,6 +11,7 @@ class View_Frontend_Offer extends  Extension_Core_View_Yui_Template
 		$this->setWidgetDependencies('recordset-base');
 		$this->setWidgetDependencies('cookie');
 		$this->setWidgetDependencies('json');
+		$this->setWidgetDependencies('event-custom'); 
 	}  
 	
 	public function getEventListWidget()
@@ -74,6 +75,7 @@ class View_Frontend_Offer extends  Extension_Core_View_Yui_Template
 			}
 			
 			$offerTable = new View_Frontend_Widgets_OfferTableEvents();
+			 
 			$offerTable->setEventTypesId($l['event_types_id']);
 			$groupId = $this->getGroupId();
 			if($groupId)

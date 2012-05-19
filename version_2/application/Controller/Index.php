@@ -34,14 +34,13 @@ class Controller_Index extends Core_Controller_Base
 		$sportsModel->addQuery('select',array('table'=>$sportsModel->getTableName()));
 		$sportsCollection = new Core_Model_Adapter_ModelCollection();
 		$sportsCollection->getModelCollection($sportsModel);
-		  
-		$select = new Extension_View_Html_Form_Elements_Select();
+		   
 	    foreach ($sportsCollection->toArray() as $s)
 	    { 
 	    	$menu->addLink('sport_'.$s['sports_id'],array('content'=>$s['name_of_sport']));
 	    	$menu->addChild('menu','sport_'.$s['sports_id']); 
 	    } 
-		
+		 
 	    $groupsModel = new Model_GroupsModel();
 		$groupsModel->addQuery('select',array('table'=>$groupsModel->getTableName()));
 		$groupsCollection = new Core_Model_Adapter_ModelCollection();

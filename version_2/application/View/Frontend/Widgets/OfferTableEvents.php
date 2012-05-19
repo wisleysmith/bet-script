@@ -4,12 +4,14 @@ class View_Frontend_Widgets_OfferTableEvents extends Extension_Core_View_Yui_Tem
 	private $offerTable;
 	private $groupId;
 	private $eventTypesId;
-
+	private $connectToTicket;
+	private $boundToBetslip=false;
+	
 	public function __construct()
 	{
-	
+		$this->setWidgetDependencies('event-custom');  
 	}
-	
+	 
 	private function setOfferTable()
 	{ 
 		$this->offerTable = new Extension_View_Yui35_DataTable();

@@ -7,4 +7,5 @@ interface  Core_Config_IApplication
  	public function getActiveTemplate(); 
  	public function getRouter(); 
  	public function getAcl();
+ 	public function getSessionTypeFile();
 }

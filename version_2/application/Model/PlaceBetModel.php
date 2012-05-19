@@ -40,7 +40,7 @@ class Model_PlaceBetModel extends Model_BetSlipModel
 	{
 		if(!isset($this->user))
 		{
-			$this->user = new Core_Auth_User();
+			$this->user = new Core_Auth_User(); 
 		}
 		return $this->user;
 	}

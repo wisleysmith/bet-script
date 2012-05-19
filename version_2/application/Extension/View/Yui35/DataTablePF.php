@@ -28,8 +28,8 @@ class Extension_View_Yui35_DataTablePF extends Extension_Core_View_Yui_Template
 		
 		if($updateTableUrlsToService)
 		{
-			$this->setUrl('filter',Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'modelcollection'))); 
-    		$this->setUrlCRUD(Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'model')));        
+			$this->setUrl('filter',Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'modelcollection'))); 
+    		$this->setUrlCRUD(Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'model')));        
 		}  
 		 
 		$this->setWidgetDependencies('io-form'); 

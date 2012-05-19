@@ -1,6 +1,6 @@
 <?php 
 
-$url = Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view',array('params'=>'&view=View_Frontend_Offer')));
+$url = Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view',array('params'=>'&view=View_Frontend_Offer')));
 $selectList = $this->getSelectList();
 $eventTypesIdSelected = $this->getEventTypesId();
 if(!empty($selectList))

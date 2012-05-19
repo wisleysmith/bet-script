@@ -101,6 +101,7 @@ abstract class Core_View_Layout_Template extends Core_Event_Dispatcher
 		
 		if(!file_exists(Application::getIncludePath().DIRECTORY_SEPARATOR.$this->pathTemplateFile()))
 		{
+			$this->dispatchEvent('onGenerateViewAfter');  
 			return "";
 		}
 		ob_start ();

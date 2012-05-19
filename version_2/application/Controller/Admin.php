@@ -27,7 +27,7 @@ class Controller_Admin extends Core_Controller_Base
 	{
 		$homePageAdmin = new View_Admin_HomePage();
 		    
-		$url = Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view'));
+		$url = Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view'));
 		$menu = new Extension_View_Yui35_Menu();
 		 
 		$menu->addLink('bookhouse',array('content'=>'Bookhouse'));

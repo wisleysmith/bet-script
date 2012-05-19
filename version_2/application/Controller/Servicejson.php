@@ -43,10 +43,11 @@ class Controller_Servicejson extends Core_Controller_Base
 	//no use for now
 	public function actionMethod()
 	{ 
+		$this->exitWithError('not in user');
 		$requestedData = $this->validateModel();
 		$className = $requestedData['class'];
 		$method = $requestedData['method'];
-		$model = new $className();
+		$model = new $className(); 
 		
 		if(!($result = $model->$method()))
 		{
@@ -399,4 +400,141 @@ class Controller_Servicejson extends Core_Controller_Base
 		}
 		return $this->comparison;
 	}  
+	
+	public function actionLogout()
+	{  
+		 $user = new Core_Auth_User(); 
+		 $user->destroy();    
+	}
+	
+	public function actionLogin()
+	{
+		$this->preventTemplateRender();
+		$user = new Model_UserModel();
+		
+		$isVarsSet = true;
+		if(!isset($_REQUEST['username']))
+		{
+			$user->setValidationError('username', 'Username not set');
+			$isVarsSet = false;
+		}
+		
+		if(!isset($_REQUEST['password']))
+		{
+			$user->setValidationError('password', 'Password not set');
+			$isVarsSet = false;
+		}
+		
+		if(!$isVarsSet)
+		{
+			echo json_encode(array('status'=>'error','errors'=>$user->getValidationErrors()));
+			return;
+		}
+		
+		$user->setUserName($_REQUEST['username']);
+		$user->setPasswordBeforeSalt($_REQUEST['password']);
+		$user->validateFields(array('user_name','password_before_salt'));
+		if($user->isValid())
+		{
+			if(!$user->login())
+			{
+				echo json_encode(array('status'=>'error','errors'=>$user->getValidationErrors()));
+			}
+			else 
+			{
+				$userSession = new Core_Auth_User(); 
+				$userSession->setData($user->getData());
+				$userStatus = new Model_UserStatusModel(); 
+				$userStatus->load($user->getUserStatusIdFK()); 
+				$userSession->isAuth(true);
+				$userSession->setRole($userStatus->getStatusName());
+				if(Application::getSessionType() == Application::SESSION_TYPE_DB)
+				{
+					$storage = new Model_SessionStorageModel();
+					$storage->setUserId($user->getUserId());
+					$storage->setHash(session_id());
+					$storage->insert();	
+				} 
+				exit(session_id());
+				echo json_encode(array('status'=>'ok'));
+			}
+		}
+		else 
+		{
+			echo json_encode(array('status'=>'error','errors'=>$user->getValidationErrors()));
+		} 
+	}
+	
+ 
+	public function actionRegistration()
+	{ 
+		$user = new Model_UserModel();
+		$isVarsSet = true;
+		if(!isset($_REQUEST['user_nameReg']))
+		{
+			$user->setValidationError('username', 'Username not set');
+			$isVarsSet = false;
+		}
+		
+		
+		if(!isset($_REQUEST['passwordReg']))
+		{
+			$user->setValidationError('password', 'Password not set');
+			$isVarsSet = false;
+		}
+		
+		if(!isset($_REQUEST['first_name']))
+		{
+			$user->setValidationError('first_name', 'Firstname not set');
+			$isVarsSet = false;
+		}
+		
+		if(!isset($_REQUEST['last_name']))
+		{
+			$user->setValidationError('password', 'Last name not set');
+			$isVarsSet = false;
+		}
+		
+		if(!isset($_REQUEST['email']))
+		{
+			$user->setValidationError('email', 'Email not set');
+			$isVarsSet = false;
+		}
+		
+		if(!$isVarsSet)
+		{
+			echo json_encode(array('status'=>'error','errors'=>$user->getValidationErrors()));
+			return false;
+		}
+		
+		$user->setUserName($_REQUEST['user_nameReg']);
+		$user->setPasswordBeforeSalt($_REQUEST['passwordReg']);
+		$user->setFirstName($_REQUEST['first_name']);
+		$user->setLastName($_REQUEST['last_name']);
+		$user->setEmail($_REQUEST['email']);
+		$user->validateFields(array('user_name','password','first_name','last_name','email'));
+		$thirdPartyLoginId = null;
+		if(isset($_REQUEST['thirdPartyLoginId']))
+		{
+			$thirdPartyLoginId = (int)$_REQUEST['thirdPartyLoginId'];
+		}
+		$user->setThirdPartyLoginId($thirdPartyLoginId);
+		
+		if($user->isValid())
+		{  
+			$user->registration();
+			if(!$user->isValid())
+			{
+				echo json_encode(array('status'=>'error','errors'=>$user->getValidationErrors()));
+			}
+			else 
+			{
+				echo json_encode(array('status'=>'ok','message'=>'Registration is complete<br /> You may login now'));
+			}
+		}
+		else 
+		{
+			echo json_encode(array('status'=>'error','errors'=>$user->getValidationErrors()));
+		} 
+	}
 }

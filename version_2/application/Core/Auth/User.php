@@ -1,6 +1,15 @@
 <?php
 class Core_Auth_User extends Core_Session_Object 
 {  
+	public function __construct($sessionId = null)
+	{  
+		parent::__construct();
+	}
+	 
+	public function getSessionNameSpace()
+	{
+		return 'USER';
+	}
 	
 	public function setRole($role)
 	{
@@ -31,8 +40,8 @@ class Core_Auth_User extends Core_Session_Object
 	}
 	
 	public function setUserId($userid)
-	{
-		 $_SESSION[$this->sessionNamespace()]['userid'] = $userid;
+	{ 
+		$_SESSION[$this->sessionNamespace()]['userid'] = $userid;
 	}
 	 
 	public function getUserId()
@@ -41,6 +50,7 @@ class Core_Auth_User extends Core_Session_Object
 		{
 			return $_SESSION[$this->sessionNamespace()]['user_id'];
 		}
+		return null;
 	} 
 	
 	public function isAuth($value=null)
@@ -55,7 +65,8 @@ class Core_Auth_User extends Core_Session_Object
 		}
 		else 
 		{ 
+			
 			$_SESSION[$this->sessionNamespace()]['is_auth'] = (bool) $value;
 		}
-	}
+	} 
 }

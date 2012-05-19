@@ -58,7 +58,7 @@ class View_Admin_Widgets_OfferTableEvents extends Extension_Core_View_Yui_Templa
 			return;	
 		}
 		
-		$offerTable->setUrl('filter',Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'method','params'=>'method=completeEventBetDataArray&groups_id='.$groupsId.'&event_types_id'.$eventTypesId))); 
+		$offerTable->setUrl('filter',Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'method','params'=>'method=completeEventBetDataArray&groups_id='.$groupsId.'&event_types_id'.$eventTypesId))); 
 		
 		$preperedTableArray = $model->completeEventBetDataArray($groupsId,$eventTypesId);
 		   

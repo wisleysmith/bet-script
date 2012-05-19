@@ -31,28 +31,26 @@ class Controller_Servicehtml extends Core_Controller_Base
 	{
 		
 	} 
-	 
- 	public function actionView()
- 	{
- 		if(!isset( $_REQUEST['view']))
+
+	private function validateView()
+	{
+		if(!isset( $_REQUEST['view']))
  		{
  			$this->exitWithError('View not set'); 
-			exit;
  		}
- 		$className= $_REQUEST['view'];
+ 		
+		$className = $_REQUEST['view'];
  		//check if request is for view folder
 		if(strpos($className, 'View_')!==0)
 		{
 			$this->exitWithError('View does not existe'); 
-			exit;
 		}
  		if(!class_exists($className))
 		{
 			$this->exitWithError('View does not exist'); 
-			exit;
 		}
 		
- 		$user = new Core_Auth_User(); 
+		$user = new Core_Auth_User(); 
 		$acl = Application::getAcl(); 
 		$role =$user->getRole();
 		if($role!='admin'&&$role!='superadmin')
@@ -60,23 +58,35 @@ class Controller_Servicehtml extends Core_Controller_Base
 			$acl->addCurrentAsset($_REQUEST['view']);
 			$acl->validate();
 		}
-		 
+		
+		return $className;
+	}
+	
+ 	public function actionView()
+ 	{  
+ 		$className = $this->validateView();
  		$class = new $className();
+ 		
  		try 
- 		{
+ 		{ 
  			$html = $class->generateView();
- 			$widgetDependencies =Application::getSingleton('Extension_View_Yui35_ModuleDependencies')->getWidgetDependenciesHtml();
- 			if($widgetDependencies!='')
- 			{
- 				$widgetDependencies = $widgetDependencies.',';
- 			} 
- 			
- 			$javascript = 
- 			    ' Y.use('.$widgetDependencies.' function () {'.
- 				 Core_View_Layout_JavascriptTemplate::singleton()->getJavascript().
-			'})';
+ 			$javascript = Core_View_Layout_JavascriptTemplate::singleton()->getJavascript();
  			 
- 			echo json_encode(array('status'=>'ok','html'=>$html,'javascript'=>$javascript));
+ 			if(isset($_REQUEST['raw']))
+ 			{
+ 				if($_REQUEST['raw']=='js')
+ 				{
+ 					echo $javascript;
+ 				}
+ 				else if($_REQUEST['raw']=='html')
+ 				{
+ 					echo $html;
+ 				}
+ 			}
+ 			else 
+ 			{
+ 				echo json_encode(array('status'=>'ok','html'=>$html,'javascript'=>$javascript));
+ 			} 
  		} 
  		catch (Exception $e) 
  		{
@@ -84,4 +94,6 @@ class Controller_Servicehtml extends Core_Controller_Base
 			exit;
  		} 
  	} 
+ 	
+ 	 
 }

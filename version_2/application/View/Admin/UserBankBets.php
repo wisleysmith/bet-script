@@ -16,7 +16,7 @@ class View_Admin_UserBankBets extends Core_View_Layout_Template
 	
 	public function setBank()
 	{
-		$bank = new View_Frontend_UserBank();
+		$bank = new View_Admin_UserBank();
 		$bank->setUserId($this->getUserId());
 		$this->bank = $bank; 
 	}
@@ -32,7 +32,7 @@ class View_Admin_UserBankBets extends Core_View_Layout_Template
 	
 	public function setBets()
 	{
-		$bets = new View_Frontend_UserBets();
+		$bets = new View_Admin_UserBets();
 		$bets->setUserId($this->getUserId());
 		$this->bets = $bets; 
 	}

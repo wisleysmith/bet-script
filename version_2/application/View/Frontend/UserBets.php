@@ -37,7 +37,7 @@ class View_Frontend_UserBets extends Core_View_Layout_Template
 		$model->addQuery('limit',array('limit'=>20));  
 		
 		$bets->setModel($model);
-		$url = Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view'));
+		$url = Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view'));
 		$table->addColumn(array('key'=>'bet_slip_id','label'=> 'ID'));
 		$table->addColumn(array('key'=>'date_created','label'=> 'Played'));  
 		$table->addColumn('{key:status,label: "Status",allowHTML:true,formatter:function(o){if(o.data.status==2){return "Finished"} else {return "In Play"}}}',false,'transaction_type_id_FK');
