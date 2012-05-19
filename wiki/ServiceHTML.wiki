@@ -1,0 +1,2 @@
+Insert at bottom of your page HTML code:
+<script src="http://localhost/zendworkspace/betting_online_2/trunk/version_2/?controller=servicehtml&action=view&view=View_Frontend_WidgetsLoader&raw=js" ></script> 
