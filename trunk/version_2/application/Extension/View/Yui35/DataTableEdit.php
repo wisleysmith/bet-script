@@ -32,8 +32,8 @@ class Extension_View_Yui35_DataTableEdit extends Extension_Core_View_Yui_Templat
 		
 		if($updateTableUrlsToService)
 		{
-			$this->setUrl('filter',Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'modelcollection'))); 
-    		$this->setUrlCRUD(Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'model')));        
+			$this->setUrl('filter',Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'modelcollection'))); 
+    		$this->setUrlCRUD(Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'model')));        
 		}  
 		  
 		$this->setWidgetDependencies('io-form');  

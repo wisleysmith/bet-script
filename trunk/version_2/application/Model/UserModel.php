@@ -18,10 +18,10 @@ class Model_UserModel extends Model_Base_UserModelBase
 	{  
 		if(!in_array('user_name', $excludeFromValidation))
 		{
-			$usernameSizeValidator =  new Zend_Validate_StringLength(3,20);
+			$usernameSizeValidator =  new Zend_Validate_StringLength(1,20);
 			if (!$usernameSizeValidator->isValid($this->getUserName()))
 		    {
-				$this->setValidationError('user_name', "Username size must bee between 3-20");
+				$this->setValidationError('user_name', "Username size must bee between 1-20");
 			}
 		}
 		
@@ -38,11 +38,11 @@ class Model_UserModel extends Model_Base_UserModelBase
 		{
 			if($this->getPasswordBeforeSalt()!='')
 			{
-				$passwordSizeValidator =  new Zend_Validate_StringLength(5,20);
+				$passwordSizeValidator =  new Zend_Validate_StringLength(1,20);
 				 
 				if (!$passwordSizeValidator->isValid($this->getPasswordBeforeSalt()))
 			    { 
-					$this->setValidationError('password', "Password size must bee between 5-20");
+					$this->setValidationError('password', "Password size must bee between 1-20");
 				}  
 			} 
 		}
@@ -70,11 +70,12 @@ class Model_UserModel extends Model_Base_UserModelBase
 	public function login()
 	{
 		$userId = $this->getUserId();
+		
 		if(!isset($userId))
 		{
 			$this->load(array('user_name'=>$this->getUserName(),'password'=>$this->passwordWithSalt()));
 		}
-	
+
 		$userId = $this->getUserId();
 	 
 		if(!isset($userId))
@@ -93,7 +94,7 @@ class Model_UserModel extends Model_Base_UserModelBase
 		if($bookhouse->getCanUserRegister()==0)
 		{
 			$this->setValidationError('Bookhouse', 'Registration is disabled');
-		}
+		} 
 		
 		$userCheckModel = new Model_UserModel();
 		$userCheckModel->load(array('user_name'=>$this->getUserName()));

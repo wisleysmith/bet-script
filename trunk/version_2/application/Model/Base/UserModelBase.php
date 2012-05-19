@@ -17,7 +17,8 @@ class Model_Base_UserModelBase extends Core_Model_Adapter_Object
 		'user_status_id_FK' =>array('numeric','required'),
 		'mail_validation' =>array('size'=>array('min'=>0,'max'=>50)),
 		'banned' =>array('numeric','required'),
-		'email_validated' =>array('numeric','required') 
+		'email_validated' =>array('numeric','required'),
+		'third_party_login_id' =>array('numeric') 
 	);
 	
 	private $filters = array
@@ -33,7 +34,8 @@ class Model_Base_UserModelBase extends Core_Model_Adapter_Object
 		'user_status_id_FK' =>array('addslashes','trim'),
 		'mail_validation' =>array('addslashes','trim'),
 		'banned' =>array('addslashes','trim'),
-		'email_validated' =>array('addslashes','trim') 
+		'email_validated' =>array('addslashes','trim'),
+		'third_party_login_id' =>array('addslashes','trim') 
 	);
 	
 	
@@ -91,6 +93,8 @@ class Model_Base_UserModelBase extends Core_Model_Adapter_Object
 		$this->data['banned'] = null;
 		$this->columns['email_validated'] =  array('TABLE_CATALOG'=>'','TABLE_SCHEMA'=>'betting_last','TABLE_NAME'=>'user','COLUMN_NAME'=>'email_validated','ORDINAL_POSITION'=>'12','COLUMN_DEFAULT'=>'','IS_NULLABLE'=>'NO','DATA_TYPE'=>'tinyint','CHARACTER_MAXIMUM_LENGTH'=>'','CHARACTER_OCTET_LENGTH'=>'','NUMERIC_PRECISION'=>'3','NUMERIC_SCALE'=>'0','CHARACTER_SET_NAME'=>'','COLLATION_NAME'=>'','COLUMN_TYPE'=>'tinyint(4)','COLUMN_KEY'=>'','EXTRA'=>'','PRIVILEGES'=>'select,insert,update,references','COLUMN_COMMENT'=>'','PROPERTY_COLUMN_NAME'=>'emailValidated');
 		$this->data['email_validated'] = null;
+		$this->columns['third_party_login_id'] =  array('TABLE_CATALOG'=>'','TABLE_SCHEMA'=>'betting_last','TABLE_NAME'=>'user','COLUMN_NAME'=>'third_party_login_id','ORDINAL_POSITION'=>'13','COLUMN_DEFAULT'=>'','IS_NULLABLE'=>'YES','DATA_TYPE'=>'bigint','CHARACTER_MAXIMUM_LENGTH'=>'','CHARACTER_OCTET_LENGTH'=>'','NUMERIC_PRECISION'=>'19','NUMERIC_SCALE'=>'0','CHARACTER_SET_NAME'=>'','COLLATION_NAME'=>'','COLUMN_TYPE'=>'bigint(21)','COLUMN_KEY'=>'','EXTRA'=>'','PRIVILEGES'=>'select,insert,update,references','COLUMN_COMMENT'=>'','PROPERTY_COLUMN_NAME'=>'thirdPartyLoginId');
+		$this->data['third_party_login_id'] = null;
    
 	}  
 	
@@ -154,6 +158,11 @@ class Model_Base_UserModelBase extends Core_Model_Adapter_Object
 		$this->data['email_validated'] = $emailValidated; 
 	}
 
+	public function setThirdPartyLoginId($thirdPartyLoginId)
+	{
+		$this->data['third_party_login_id'] = $thirdPartyLoginId; 
+	}
+
 
 	public function getUserId()
 	{
@@ -213,6 +222,11 @@ class Model_Base_UserModelBase extends Core_Model_Adapter_Object
 	public function getEmailValidated()
 	{
 		return $this->data['email_validated']; 
+	}
+
+	public function getThirdPartyLoginId()
+	{
+		return $this->data['third_party_login_id']; 
 	}
 
 

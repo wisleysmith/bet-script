@@ -24,18 +24,22 @@
 
 
 class Bootstrap implements Core_Config_IApplication
-{ 
-	private $router;
+{  
+	private $router; 
+	
 	public function run()
-	{ 
+	{   
+		 
 		$user = new Core_Auth_User();
+		 
 		if($user->getRole()===null)
 		{
 			$user->setRole('guest');
 		};
-
+		 
+		Core_View_Layout_JavascriptTemplate::singleton()->setCurrentJsFramework(Core_View_Layout_JavascriptTemplate::YUI);
 		$this->router = new Core_Router_Route(); 
-		$sql = new Core_Model_Connection_MySql('localhost','root','','betting_last');
+		$sql = new Core_Model_Connection_MySql('localhost','','','');
 		$queriesTemplate = new Extension_Core_Model_Template_MySqlQueries();
 		Core_Model_Adapter_Sql::setSqlConnection($sql);
 		Core_Model_Adapter_Sql::setSqlTemplate($queriesTemplate);
@@ -72,17 +76,27 @@ class Bootstrap implements Core_Config_IApplication
 	{ 
 		 $acl = new Core_Acl_Controller();
 		 $acl->addRole('guest');
-		 $acl->addRoleAsset('guest','index_login');
+		 $acl->addRoleAsset('guest','index_login'); 
 		 $acl->addRoleAsset('guest','index_index');
+		  
+		 $acl->addRoleAsset('guest', 'servicejson_login'); 
+		 $acl->addRoleAsset('guest', 'servicejson_registration'); 
+		 
 		 $acl->addRoleAsset('guest','admin_index');
 		 $acl->addRoleAsset('guest','index_frontend');
 		 $acl->addRoleAsset('guest','index_registration');
-		 $acl->addRoleAsset('guest', 'servicehtml_view'); 
-		 $acl->addRoleAsset('guest', 'View_Frontend_Offer');
-		 $acl->addRoleAsset('admin', 'modelgenerator_index'); 
+		 $acl->addRoleAsset('guest', 'servicehtml_view');  
+		 $acl->addRoleAsset('guest', 'View_Frontend_Offer'); 
+		 $acl->addRoleAsset('guest', 'View_Frontend_WidgetsLoader');
+		 $acl->addRoleAsset('guest', 'View_Frontend_Widgets_OfferTableEvents');
+		 $acl->addRoleAsset('guest', 'View_Frontend_MenuContent'); 
+		 $acl->addRoleAsset('guest', 'View_Frontend_Widgets_Ticket');
 		 
+		 $acl->addRoleAsset('admin', 'modelgenerator_index'); 
+		    
 		 $acl->addRole('user','guest');
 		 $acl->addRoleAsset('user','index_logout'); 
+		 $acl->addRoleAsset('guest', 'servicejson_logout'); 
 		 $acl->addRoleAsset('user', 'Model_PlaceBetModel_insert');
 		 $acl->addRoleAsset('user', 'View_Frontend_UserBets'); 
 		 $acl->addRoleAsset('user', 'View_Frontend_UserBank'); 
@@ -104,10 +118,15 @@ class Bootstrap implements Core_Config_IApplication
 		 	//there is no restriction;
 		 }
 		 else if($role=='guest'||$role=='user')
-		 {
+		 { 
 			 $acl->addCurrentAsset($this->getRouter()->getController().'_'.$this->getRouter()->getAction());
 		 } 
 		 
 		 return $acl;
+	}
+	 
+	public function getSessionTypeFile()
+	{
+		return Application::SESSION_TYPE_SERVER;
 	}
 }

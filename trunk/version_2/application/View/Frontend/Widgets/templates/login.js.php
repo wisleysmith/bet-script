@@ -2,7 +2,7 @@ Y.one('#loginButton').on('click',
 	function()
 	{
 		Y.one('#errorsLogin').setContent('');
-		var uriLoginForm = '<?php echo Application::getRouter()->getUrl(array('controller'=>'index','action'=>'login')); ?>';
+		var uriLoginForm = '<?php echo Application::getRouter()->getFullUrl(array('controller'=>'index','action'=>'login')); ?>';
 		var cfg = {
 		    method: 'POST',
 			form: {

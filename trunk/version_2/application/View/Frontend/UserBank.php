@@ -56,7 +56,7 @@ class View_Frontend_UserBank extends Core_View_Layout_Template
 		$typeCollectionData = $typeCollection->getModelCollection($typeModel);
 		$table->addColumn('{key:"transaction_type_id_FK",label:"Type Of Transaction",allowHTML:true,formatter:'.$table->getFormatter("labelFromModelCollection",array('values'=>$typeCollectionData,'value'=>'transaction_type_id','label'=>'transaction_name','attributes'=>array('name'=>'model['.$model->getModelClassName().'][transaction_type_id_FK]'))).'}',false,'transaction_type_id_FK');
 		
-		$url = Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view'));   
+		$url = Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view'));   
 		$table->addColumn(array('key'=>'transaction_id','label'=> 'ID'));
 		$table->addColumn(array('key'=>'money','label'=> 'Money')); 
 		$table->addColumn(array('key'=>'date_created','label'=> 'Date')); 

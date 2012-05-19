@@ -31,10 +31,13 @@ abstract class Core_Model_Adapter_Object extends Core_Model_Adapter_Sql
 		else 
 		{ 
 			foreach ($values as $key=>$v)
-			{
+			{ 
 				if($column = $this->getColumns($key))
-				{
-					$this->addQuery('where',array('where_condition'=>"$key='$v'"));  
+				{ 
+					$columnName = $column['COLUMN_NAME'];
+					$this->addData($columnName, $v);
+					$this->validateFields($columnName);
+					$this->addQuery('where',array('where_condition'=>"$columnName='$v'"));  
 				}
 			}
 		}

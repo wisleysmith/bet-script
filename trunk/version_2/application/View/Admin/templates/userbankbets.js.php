@@ -17,7 +17,7 @@ Y.one('#betsPanelLink').on('click',
 Y.one('#addMoney').on('click',
 	function()
 	{ 
-		var uriAddMoney = '<?php echo Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'model')); ?>';
+		var uriAddMoney = '<?php echo Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'model')); ?>';
 		var cfg = {
 		    method: 'POST',
 			form: {

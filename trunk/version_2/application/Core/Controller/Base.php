@@ -72,7 +72,7 @@ class Core_Controller_Base
 	
 	public function redirect($controller,$view,$params = array())
 	{
-		$url = Application::getRouter()->getUrl(array('controller'=>$controller,'action'=>$view));
+		$url = Application::getRouter()->getFullUrl(array('controller'=>$controller,'action'=>$view));
 		header("Location: $url");
 	}
 }

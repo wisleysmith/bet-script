@@ -48,7 +48,7 @@
 	 	{
 	 		return false;
 	 	}
-		var uriLoginForm = '<?php echo Application::getRouter()->getUrl(array('controller'=>'index','action'=>'registration')); ?>';
+		var uriLoginForm = '<?php echo Application::getRouter()->getFullUrl(array('controller'=>'index','action'=>'registration')); ?>';
 		var cfg = {
 		    method: 'POST',
 			form: {

@@ -14,7 +14,7 @@ class View_Admin_Bank extends Core_View_Layout_Template
 	
 	public function setBank()
 	{
-		$bank = new View_Frontend_UserBank();
+		$bank = new View_Admin_UserBank();
 		$bank->setUserId(null);
 		$this->bank = $bank; 
 	} 

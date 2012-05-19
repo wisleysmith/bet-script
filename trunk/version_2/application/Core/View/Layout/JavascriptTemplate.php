@@ -4,13 +4,26 @@
 //javascript is added to class when user __toString in template example echo new View_Template_Admin
 class Core_View_Layout_JavascriptTemplate
 {
+	const YUI = 'YUI';
     private static $instance; 
     private $javascript;
+    private $currentJsFramework;
 
     private function __construct()
     {
     }
 
+    public function setCurrentJsFramework($jsF)
+    {
+    	return $this->currentJsFramework = $jsF;
+    }
+    
+
+    public function getCurrentJsFramework()
+    {
+    	return $this->currentJsFramework;
+    }
+    
     public static function singleton()
     {
         if (!isset(self::$instance)) { 
@@ -33,11 +46,31 @@ class Core_View_Layout_JavascriptTemplate
     public function appendJavascript($javascript)
     {
     	$this->javascript.= $javascript;
-    }
+    } 
     
     public function getJavascript()
+    { 
+    	$jsF = $this->getCurrentJsFramework();
+    	if($jsF == Core_View_Layout_JavascriptTemplate::YUI)
+    	{
+    		return $this->yuiTemplate();
+    	}
+    } 
+    
+    public function yuiTemplate()
     {
-    	return $this->javascript;
+    	$widgetDependencies = Application::getSingleton('Extension_View_Yui35_ModuleDependencies')->getWidgetDependenciesHtml();
+ 		if($widgetDependencies!='')
+ 		{
+ 			$widgetDependencies = $widgetDependencies.',';
+ 		} 
+ 			
+ 		$javascript = 
+ 			    ' YUI().use('.$widgetDependencies.' function (Y) {'.
+ 				 $this->javascript.
+		'})';
+ 		return $javascript;	 
     }
+    
 }
 ?>

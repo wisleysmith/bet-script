@@ -18,6 +18,5 @@ class Extension_View_Yui35_Panel extends Extension_Core_View_Yui_Template
 	public function setBody($body)
 	{
 		$this->body= $body;
-	} 
-	
+	}  
 }  

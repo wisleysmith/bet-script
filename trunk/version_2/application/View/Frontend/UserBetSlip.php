@@ -80,4 +80,5 @@ class View_Frontend_UserBetSlip extends  Extension_Core_View_Yui_Template
 	}
 	
 	
+	
 }

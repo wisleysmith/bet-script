@@ -81,8 +81,8 @@
       <div id="navigation_cnr" class="cbox">
       <img src="images/px_fix.gif" class="px_fix" />
         <ul>
-         <li><a href="<?php echo Application::getRouter()->getUrl(array('controller'=>'index','action'=>'index'));?>" class="<?php if(Application::getController()=='index'){echo 'active';}?>">Front End</a></li>
-          <li><a href="<?php echo Application::getRouter()->getUrl(array('controller'=>'admin','action'=>'index'));?>" class="<?php if(Application::getController()=='admin'){echo 'active';}?>">Admin</a></li>
+         <li><a href="<?php echo Application::getRouter()->getFullUrl(array('controller'=>'index','action'=>'index'));?>" class="<?php if(Application::getController()=='index'){echo 'active';}?>">Front End</a></li>
+          <li><a href="<?php echo Application::getRouter()->getFullUrl(array('controller'=>'admin','action'=>'index'));?>" class="<?php if(Application::getController()=='admin'){echo 'active';}?>">Admin</a></li>
  		</ul>
         <img src="images/logo.gif" id="logo" /> </div>
       <!--navigation_cnr-->
@@ -94,8 +94,8 @@
 		{ 
 			?>
 			<div style="float:left;padding:10px" >
-				<a href="javascript:void(0)" class="systemServiceLink" servicehtml="<?php echo Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Frontend_UserBets'));?>" > My Bets </a>
-				  | <a href="javascript:void(0)" class="systemServiceLink" servicehtml="<?php echo Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Frontend_UserBank'));?>"> My Bank</a>
+				<a href="javascript:void(0)" class="systemServiceLink" servicehtml="<?php echo Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Frontend_UserBets'));?>" > My Bets </a>
+				  | <a href="javascript:void(0)" class="systemServiceLink" servicehtml="<?php echo Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Frontend_UserBank'));?>"> My Bank</a>
 			</div>
 			<?php 
 		}
@@ -758,7 +758,7 @@ YUI().use( <?php echo Application::getSingleton('Extension_View_Yui35_ModuleDepe
 	{		
  <?php  
 		 echo Core_View_Layout_JavascriptTemplate::singleton()->getJavascript();
-		 echo $this->getMenu()->generateJavascript();
+		 
 		 ?>
 	 
 		 Y.delegate("click",

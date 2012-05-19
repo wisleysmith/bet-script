@@ -2,7 +2,7 @@ Y.one('#sport_select').on('change',
 	function(e)
 	{ 
 		resetView();
-		var uri ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_GroupsSelect')) ?>&sports_id='+e.currentTarget.get('value');
+		var uri ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_GroupsSelect')) ?>&sports_id='+e.currentTarget.get('value');
 		var cfg = { 
 	    	method: 'POST', 
 	         on: { 
@@ -26,7 +26,7 @@ Y.one('#sport_select').on('change',
 	    }; 
 		var request = Y.io(uri, cfg);  
 		
-		var uriEventsTypes ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_EventTypesSelect')) ?>&sports_id='+e.currentTarget.get('value');
+		var uriEventsTypes ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_EventTypesSelect')) ?>&sports_id='+e.currentTarget.get('value');
 		var cfgEventsTypes = { 
 	    	method: 'POST', 
 	         on: { 
@@ -175,7 +175,7 @@ Y.one('#saveEvent').on('click',
 		 postData+='&model[Model_BetsModel][bet_active]='+yearActive+' '+hoursActive+':'+minutesActive+':'+'00'
 		 
 		 
-		var uri ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'model')) ?>';
+		var uri ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'model')) ?>';
 		var cfg = { 
 	    	method: 'POST', 
 	    	data:'method=insert'+postData,
@@ -214,7 +214,7 @@ function setGroupListner()
  	Y.one('select[name=groups_id]').on('change',
 		function(e)
 		{  
-			var uri ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_TeamsTable')) ?>&groups_id='+e.currentTarget.get('value');
+			var uri ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_TeamsTable')) ?>&groups_id='+e.currentTarget.get('value');
 			var cfg = { 
 		    	method: 'POST', 
 		         on: { 
@@ -236,7 +236,7 @@ function setGroupListner()
 		    }; 
 			Y.io(uri, cfg);  
 		 
-			var uriEvents ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_EventsSelect')) ?>&groups_id='+e.currentTarget.get('value');
+			var uriEvents ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_EventsSelect')) ?>&groups_id='+e.currentTarget.get('value');
 			var cfgEvents = { 
 		    	method: 'POST', 
 		         on: { 
@@ -267,7 +267,7 @@ function setEventTypesListener()
  	Y.one('select[name=event_types_id]').on('change',
 		function(e)
 		{  
-			var uri ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_CreateBetOddsTable')) ?>&event_types_id='+e.currentTarget.get('value');
+			var uri ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view','params'=>'view=View_Admin_Widgets_CreateBetOddsTable')) ?>&event_types_id='+e.currentTarget.get('value');
 			var cfg = { 
 		    	method: 'POST', 
 		         on: { 
@@ -297,7 +297,7 @@ function setBetsListener()
  	Y.one('select[name=bets_id]').on('change',
 		function(e)
 		{   
-			var uri ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'model')) ?>';
+			var uri ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'model')) ?>';
 			var selectedIndex = e.currentTarget.get('selectedIndex');
 			var options = e.currentTarget.get('options');
 			Y.one('#betName').set('value',options.get('nodes')[selectedIndex].get('label')); 
@@ -413,7 +413,7 @@ Y.one('#saveBet').on('click',
 		
 		 
 		 
-		var uri ='<?php echo  Application::getRouter()->getUrl(array('controller'=>'servicejson','action'=>'model')) ?>';
+		var uri ='<?php echo  Application::getRouter()->getFullUrl(array('controller'=>'servicejson','action'=>'model')) ?>';
 		var cfg = { 
 	    	method: 'POST', 
 	    	data:'method=insert'+postData+oddsData,

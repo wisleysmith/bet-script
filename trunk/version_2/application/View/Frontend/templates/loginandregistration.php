@@ -17,7 +17,7 @@ if($user->isAuth())
 {
 	?>
 	<div style="float:right">
-	  	<a href="<?php echo $url = Application::getRouter()->getUrl(array('controller'=>'index','action'=>'logout'));?>"> Logout </a>
+	  	<a href="<?php echo $url = Application::getRouter()->getFullUrl(array('controller'=>'index','action'=>'logout'));?>"> Logout </a>
 	</div>
 <?php 
 }

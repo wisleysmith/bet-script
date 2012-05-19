@@ -1,5 +1,16 @@
 <?php
-  
+
+// sql injection prevention on load() method in models
+// template generation, if view not set js can be created
+// service html view has option for generation of raw js or html file without json.
+// view validation in servicehtml moved to new method validateView;
+// multi javascript support
+// setting session id moved from session Object to Applicction
+// session object declared abstract
+// menu component created, menu YUI 3 widget possible to load View classes
+// service js creator file added, WidgetLoader
+// session with files added
+
 /**
  * @copyright   Copyright (c) 2012 Oxidian d.o.o (http://www.oxidian.hr)
  * @license     http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,14 +38,19 @@
  */
 class Application 
 { 
+	
+  	const SESSION_TYPE_SERVER = "server";
+	const SESSION_TYPE_DB = "database";
+	const SESSION_TYPE_FILE = "file";
+	
 	private static $router;
+	
+	private static $serviceKey;
 	
 	private static $bootstrap;
 	
 	private static $includePath;
-	
-	private static $configurationXML;
-	
+	  
 	private static $templates;
 	
 	private static $activeTemplate;
@@ -44,10 +60,31 @@ class Application
 	private static $singletons;
 	
 	private static $acl;
+	
+	private static $sessionType = Application::SESSION_TYPE_SERVER;
 	 
-  
+	public static function setServiceKey($key)
+	{
+		self::$serviceKey = $key;
+	}
+	
+	public static function getServiceKey()
+	{
+		return $this->serviceKey;
+	}
+	
+	public static function setSessionType($sessionType)
+	{
+		self::$sessionType = $sessionType;
+	}
+	
+	public static function getSessionType()
+	{
+		return self::$sessionType;
+	}
+	
 	public static function run($bootstrap)
-	{   
+	{     
 		$includePaths = dirname(__FILE__);  
 	 	
 		set_include_path( 
@@ -55,6 +92,8 @@ class Application
 		);
 		
 		spl_autoload_register(array(__CLASS__, 'autoload'));
+		
+		Core_Session_Object::setSessionId(); 
 		 
 		self::$applicationPath = $includePaths;
 		
@@ -64,8 +103,7 @@ class Application
 	 	{
 	 		throw new Core_Exceptions("Bootstrap is not implemented");
 	 	}
-	 	self::runBootstrap($bootstrap);  
-		//self::parseConfiguration(Application::getConfigurationXML());  
+	 	self::runBootstrap($bootstrap);   
 	    self::displayContent();
 	} 
 	
@@ -111,21 +149,45 @@ class Application
 		if (!self::$bootstrap instanceof $classname) 
 		{
 			throw new Core_Exceptions("Bootstrap is not implementing Core_Config_IApplication interface");
-		} 
-		self::$bootstrap->run();
+		}  
+		self::setSessionHandler(self::$bootstrap->getSessionTypeFile()); 
+		self::$bootstrap->run(); 
 		self::$acl = self::$bootstrap->getAcl();  
 		self::$acl->validate();
 		self::$templates = self::$bootstrap->getTemplates();
 		self::setActiveTemplate(self::$bootstrap->getActiveTemplate());
 		self::$router = self::$bootstrap->getRouter();  
-		
 	}  
+	
+	public static function setSessionHandler($sessionType)
+	{
+		if(Application::SESSION_TYPE_FILE == $sessionType)
+		{
+			$sessionHandler = new Core_Session_HandlerTypeFile();
+		} 
+		else 
+		{
+			return;
+		}
+		
+		session_set_save_handler
+		(
+		    array($sessionHandler, 'open'),
+		    array($sessionHandler, 'close'),
+		    array($sessionHandler, 'read'),
+		    array($sessionHandler, 'write'),
+		    array($sessionHandler, 'destroy'),
+		    array($sessionHandler, 'gc')
+		);
+		
+		// the following prevents unexpected effects when using objects as save handlers
+		register_shutdown_function('session_write_close'); 
+	}
 	
 	public static function getAcl()
 	{
 		return self::$acl;
-	}
-	
+	} 
 	 
  	public static function setErrorReporting($value)
  	{
@@ -136,28 +198,7 @@ class Application
  	{
  		ini_set($option, $value); 
  	} 
- 	 
- 	/**
- 	private static function getConfigurationXML()
- 	{ 
- 		if(isset(self::$configurationXML))
- 		{
- 			return self::$configurationXML;
- 		}
- 		$configurationPath = self::$includePath.DIRECTORY_SEPARATOR."configuration.xml";
- 	 
- 		if($xmlFile = file_exists($configurationPath))
- 		{ 
- 			return	self::$configurationXML = simplexml_load_file($configurationPath);
- 		}  
- 		throw new Core_Exceptions("Configuration file does not exist");
- 	}
- 	
- 	private static function parseConfiguration($xml)
- 	{
- 		new Core_Config_ProcessConfiguration($xml);
- 	}
- 	*/
+ 	  
  	public static function getIncludePath()
  	{
  		return self::$includePath;
@@ -233,7 +274,13 @@ class Application
 		$url = str_replace('/index.php', '', $url);
 		return $url;
 	}
-}
- 
+	
+	public static function getBaseUrl()
+	{
+		$url = $_SERVER['HTTP_HOST'];
+		$url = 'http://'.$url.self::getBaseRelativeUrl();
+		return $url;
+	}
+} 
 ?> 
  

@@ -80,6 +80,12 @@ class Core_Router_Route implements Core_Router_IRouter
 		return $action;
 	} 
 	
+	public function getFullUrl($params)
+	{
+		return Application::getBaseUrl().'/'.Application::getRouter()->getUrl($params);
+	}
+	
+	
 	public function getUrl($params=array())
 	{
 		if(!isset($params['controller']))
@@ -110,7 +116,13 @@ class Core_Router_Route implements Core_Router_IRouter
 		}  
 		
 		$url = '?controller='.$controller.'&action='.$action.$params;
-		return $url; 
+		$session = '';
+		
+		if(session_id()!='')
+		{
+			$session = '&session='.session_id(); 
+		}
+		return $url.$session;
 	}    
 }
 ?>

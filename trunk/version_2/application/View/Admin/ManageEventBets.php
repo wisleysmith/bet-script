@@ -6,7 +6,7 @@ class View_Admin_ManageEventBets extends Core_View_Layout_Template
 	 
 	public function setMenu()
 	{
-		$url = Application::getRouter()->getUrl(array('controller'=>'servicehtml','action'=>'view'));
+		$url = Application::getRouter()->getFullUrl(array('controller'=>'servicehtml','action'=>'view'));
 		$menu = new Extension_View_Yui35_Menu();
 		$menu->setDirection('horizontal');
 		
