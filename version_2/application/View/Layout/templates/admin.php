@@ -117,8 +117,19 @@
         <?php 
     	 }
         ?>
+        
+             	<div style="position:absolute;right:0">
+    		<?php 
+        	if(Application::getController()=='index')
+        	{
+        		$ticket = new View_Frontend_Widgets_Ticket();
+        		echo $ticket->generateView();
+        	}
+        	?>
+        	</div>
+        
         <div id="content">
-    		<?php echo $this->getContent();?> 
+    		<?php echo $this->getContent();?>  
         </div> 
     </div>
     <!--body_cnr-->

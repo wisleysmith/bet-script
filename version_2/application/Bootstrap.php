@@ -39,7 +39,7 @@ class Bootstrap implements Core_Config_IApplication
 		 
 		Core_View_Layout_JavascriptTemplate::singleton()->setCurrentJsFramework(Core_View_Layout_JavascriptTemplate::YUI);
 		$this->router = new Core_Router_Route(); 
-		$sql = new Core_Model_Connection_MySql('localhost','','','');
+		$sql = new Core_Model_Connection_MySql('localhost','root','','betting_last');
 		$queriesTemplate = new Extension_Core_Model_Template_MySqlQueries();
 		Core_Model_Adapter_Sql::setSqlConnection($sql);
 		Core_Model_Adapter_Sql::setSqlTemplate($queriesTemplate);
