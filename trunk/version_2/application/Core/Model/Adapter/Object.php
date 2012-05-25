@@ -42,12 +42,11 @@ abstract class Core_Model_Adapter_Object extends Core_Model_Adapter_Sql
 			}
 		}
 		
-		if($data = $this->executeQuery())
+		if($data = $this->executeQuery('fetchAssocOne'))
 		{	
-			$objectData = $this->getConnection()->fetchAssoc($data);
-			if(isset($objectData[0]))
+			if(isset($data))
 			{
-				$this->setData($objectData[0]);
+				$this->setData($data);
 			}
 		}   
 	}    

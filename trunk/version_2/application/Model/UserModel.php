@@ -139,7 +139,7 @@ class Model_UserModel extends Model_Base_UserModelBase
 			$this->setPassword($this->generatePassword($password));
 			$this->addData('password_before_salt',$password);
 		}
-	}
+	}  
 	
 	public function getPasswordBeforeSalt()
 	{
